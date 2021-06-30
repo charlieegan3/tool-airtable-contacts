@@ -1,0 +1,5 @@
+airtable:
+  key: key
+  base: base
+  table: table
+  view: view
