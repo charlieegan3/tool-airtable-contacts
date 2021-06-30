@@ -34,8 +34,32 @@ func Generate(contacts []map[string]interface{}, photoSize int) (string, error) 
 		})
 
 		// set the emails
-		for _, email := range computeEmailValues(contact) {
-			card.AddValue(govcard.FieldEmail, email)
+		if val, ok := contact["JSON Emails"].(string); ok {
+			decoder := json.NewDecoder(strings.NewReader(val))
+			emails := []struct {
+				Label     string `json:"label"`
+				Value     string `json:"value"`
+				Preferred bool   `json:"preferred"`
+			}{}
+			err := decoder.Decode(&emails)
+			if err != nil {
+				return "", fmt.Errorf("failed to parse JSON emails: %s", err)
+			}
+			for i, email := range emails {
+				preferred := "1"
+				if email.Preferred {
+					preferred = "2"
+				}
+				card.Add(fmt.Sprintf("item%d.%s", i+1, govcard.FieldEmail), &govcard.Field{
+					Value: email.Value,
+					Params: map[string][]string{
+						govcard.ParamPreferred: {preferred},
+					},
+				})
+				card.Add(fmt.Sprintf("item%d.X-ABLABEL", i+1), &govcard.Field{
+					Value: email.Label,
+				})
+			}
 		}
 
 		// set the phone numbers
@@ -134,19 +158,4 @@ func computeNameValues(contact map[string]interface{}) (string, string, string, 
 	default:
 		return displayName, words[0], strings.Join(words[1:], " "), nil
 	}
-}
-
-func computeEmailValues(contact map[string]interface{}) []string {
-	emailString, ok := contact["Emails"].(string)
-
-	if !ok {
-		return []string{}
-	}
-
-	var emails []string
-	for _, email := range strings.Split(emailString, "\n") {
-		emails = append(emails, strings.TrimSpace(email))
-	}
-
-	return emails
 }

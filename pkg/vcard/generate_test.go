@@ -83,16 +83,17 @@ END:VCARD`,
 			Fields: []map[string]interface{}{
 				{
 					"Display Name": "John Appleseed",
-					"Emails": `foo@example.com
-bar@example.com`,
+					"JSON Emails":  `[{"label":"Personal", "value":"xxxxxxx@xxxxxxx.uk", "preferred": true},{"label":"Email", "value":"xxxx@xxxxx.info", "preferred": false}]`,
 				},
 			},
 			ExpectedOutput: `BEGIN:VCARD
 VERSION:4.0
-EMAIL:foo@example.com
-EMAIL:bar@example.com
 FN:John Appleseed
 N:Appleseed;John;;;
+item1.EMAIL;PREF=2:xxxxxxx@xxxxxxx.uk
+item1.X-ABLABEL:Personal
+item2.EMAIL;PREF=1:xxxx@xxxxx.info
+item2.X-ABLABEL:Email
 END:VCARD`,
 		},
 		{
