@@ -9,7 +9,9 @@ require (
 	github.com/cpuguy83/go-md2man v1.0.10 // indirect
 	github.com/d4l3k/messagediff v1.2.1 // indirect
 	github.com/disintegration/imaging v1.6.2 // indirect
+	github.com/dropbox/dropbox-sdk-go-unofficial/v6 v6.0.1 // indirect
 	github.com/emersion/go-vcard v0.0.0-20210521075357-3445b9171995 // indirect
+	github.com/fsnotify/fsnotify v1.4.7 // indirect
 	github.com/mehanizm/airtable v0.2.4 // indirect
 	github.com/sergi/go-diff v1.2.0 // indirect
 	github.com/spf13/cobra v1.1.3 // indirect

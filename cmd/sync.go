@@ -19,11 +19,14 @@ import (
 	"log"
 	"os"
 
+	dbx "github.com/dropbox/dropbox-sdk-go-unofficial/v6/dropbox"
+	"github.com/dropbox/dropbox-sdk-go-unofficial/v6/dropbox/files"
 	air "github.com/mehanizm/airtable"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
 	"github.com/charlieegan3/airtable-contacts/pkg/airtable"
+	"github.com/charlieegan3/airtable-contacts/pkg/dropbox"
 	"github.com/charlieegan3/airtable-contacts/pkg/vcard"
 )
 
@@ -32,9 +35,9 @@ var syncCmd = &cobra.Command{
 	Use:   "sync",
 	Short: "download data from airtable and upload to dropbox",
 	Run: func(cmd *cobra.Command, args []string) {
-		client := air.NewClient(viper.GetString("airtable.key"))
+		airtableClient := air.NewClient(viper.GetString("airtable.key"))
 		records, err := airtable.Download(
-			client,
+			airtableClient,
 			viper.GetString("airtable.base"),
 			viper.GetString("airtable.table"),
 			viper.GetString("airtable.view"),
@@ -49,6 +52,12 @@ var syncCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
+
+		dropboxClient := files.New(dbx.Config{
+			Token:    viper.GetString("dropbox.token"),
+			LogLevel: dbx.LogOff,
+		})
+		dropbox.Upload(dropboxClient, viper.GetString("dropbox.path"), []byte(vcardString))
 	},
 }
 
