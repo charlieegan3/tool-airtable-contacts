@@ -3,6 +3,7 @@ package vcard
 import (
 	"bytes"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"image"
 	"image/jpeg"
@@ -38,25 +39,24 @@ func Generate(contacts []map[string]interface{}, photoSize int) (string, error) 
 		}
 
 		// set the phone numbers
-		if val, ok := contact["Home Phone"].(string); ok {
-			card.Add(govcard.FieldTelephone, &govcard.Field{
-				Value: val,
-				Params: map[string][]string{
-					govcard.ParamType: {
-						govcard.TypeHome,
+		if val, ok := contact["JSON Phone Numbers"].(string); ok {
+			decoder := json.NewDecoder(strings.NewReader(val))
+			numbers := []struct {
+				Type  string `json:"type"`
+				Value string `json:"value"`
+			}{}
+			err := decoder.Decode(&numbers)
+			if err != nil {
+				return "", fmt.Errorf("failed to parse JSON phone numbers: %s", err)
+			}
+			for _, number := range numbers {
+				card.Add(govcard.FieldTelephone, &govcard.Field{
+					Value: number.Value,
+					Params: map[string][]string{
+						govcard.ParamType: {number.Type},
 					},
-				},
-			})
-		}
-		if val, ok := contact["Mobile Phone"].(string); ok {
-			card.Add(govcard.FieldTelephone, &govcard.Field{
-				Value: val,
-				Params: map[string][]string{
-					govcard.ParamType: {
-						govcard.TypeCell,
-					},
-				},
-			})
+				})
+			}
 		}
 
 		// set note

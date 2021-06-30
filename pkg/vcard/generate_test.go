@@ -99,21 +99,20 @@ END:VCARD`,
 			Description: "it sets phone numbers",
 			Fields: []map[string]interface{}{
 				{
-					"Display Name": "John Appleseed",
-					"Home Phone":   "+441483871005",
-					"Mobile Phone": "07483871005",
+					"Display Name":       "John Appleseed",
+					"JSON Phone Numbers": `[{"type":"mobile", "value":"+44333 666 7777"},{"type":"home", "value":"01526 555555"}]`,
 				},
 			},
 			ExpectedOutput: `BEGIN:VCARD
 VERSION:4.0
 FN:John Appleseed
 N:Appleseed;John;;;
-TEL;TYPE=home:+441483871005
-TEL;TYPE=cell:07483871005
+TEL;TYPE=mobile:+44333 666 7777
+TEL;TYPE=home:01526 555555
 END:VCARD`,
 		},
 		{
-			Description: "it sets phone numbers",
+			Description: "it sets notes",
 			Fields: []map[string]interface{}{
 				{
 					"Display Name": "John Appleseed",
