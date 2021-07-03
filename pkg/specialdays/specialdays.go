@@ -7,7 +7,15 @@ import (
 	"time"
 )
 
-func Generate(contacts []map[string]interface{}, checkDate time.Time) (bool, string, string, error) {
+func Generate(contacts []map[string]interface{}, checkDate time.Time, period int) (bool, string, string, error) {
+	// likely invalid call, just return nothing
+	if period == 0 {
+		return false, "", "", nil
+	}
+
+	periodStart := checkDate
+	periodEnd := checkDate.Add(time.Duration(period) * time.Hour * 24).Add(-1 * time.Second)
+
 	contactsWithBirthdays := []string{}
 	contactsWithSpecialDays := []string{}
 	specialDayMessages := []string{}
@@ -21,7 +29,9 @@ func Generate(contacts []map[string]interface{}, checkDate time.Time) (bool, str
 				return false, "", "", fmt.Errorf("failed to parse birthday value for: %v", contact)
 			}
 
-			if birthday.Day() == checkDate.Day() && birthday.Month() == checkDate.Month() {
+			birthdayThisYear := time.Date(time.Now().UTC().Year(), birthday.Month(), birthday.Day(), 0, 0, 0, 0, time.UTC)
+
+			if dateInPeriod(periodStart, periodEnd, birthdayThisYear) {
 				contactsWithBirthdays = append(contactsWithBirthdays, contact["Display Name"].(string))
 			}
 		}
@@ -44,7 +54,9 @@ func Generate(contacts []map[string]interface{}, checkDate time.Time) (bool, str
 					return false, "", "", fmt.Errorf("failed to parse special day date value for: %v", contact)
 				}
 
-				if date.Day() == checkDate.Day() && date.Month() == checkDate.Month() {
+				dateThisYear := time.Date(time.Now().UTC().Year(), date.Month(), date.Day(), 0, 0, 0, 0, time.UTC)
+
+				if dateInPeriod(periodStart, periodEnd, dateThisYear) {
 					contactsWithSpecialDays = append(contactsWithSpecialDays, contact["Display Name"].(string))
 					specialDayMessages = append(
 						specialDayMessages,
@@ -104,4 +116,14 @@ func Generate(contacts []map[string]interface{}, checkDate time.Time) (bool, str
 	}
 
 	return false, "", "", nil
+}
+
+func dateInPeriod(periodStart, periodEnd, date time.Time) bool {
+	if date.Equal(periodStart) || date.Equal(periodEnd) {
+		return true
+	}
+	if date.After(periodStart) && date.Before(periodEnd) {
+		return true
+	}
+	return false
 }
