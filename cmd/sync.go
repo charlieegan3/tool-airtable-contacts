@@ -35,6 +35,7 @@ var syncCmd = &cobra.Command{
 	Use:   "sync",
 	Short: "download data from airtable and upload to dropbox",
 	Run: func(cmd *cobra.Command, args []string) {
+		// get the latest data
 		airtableClient := air.NewClient(viper.GetString("airtable.key"))
 		records, err := airtable.Download(
 			airtableClient,
@@ -46,6 +47,7 @@ var syncCmd = &cobra.Command{
 			log.Fatalf("failed to download contacts: %s", err)
 		}
 
+		// generate vcard for upload
 		vcardString, err := vcard.Generate(records, viper.GetInt("vcard.photo.size"))
 
 		err = os.WriteFile("out.vcard", []byte(vcardString), 0644)
@@ -53,6 +55,7 @@ var syncCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
+		// store in dropbox for sync
 		dropboxClient := files.New(dbx.Config{
 			Token:    viper.GetString("dropbox.token"),
 			LogLevel: dbx.LogOff,

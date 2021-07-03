@@ -6,6 +6,55 @@ import (
 	"time"
 )
 
+func TestDateInPeriod(t *testing.T) {
+	testCases := []struct {
+		PeriodStart time.Time
+		PeriodEnd   time.Time
+		Date        time.Time
+		Result      bool
+	}{
+		{
+			PeriodStart: time.Date(2021, time.March, 21, 0, 0, 0, 0, time.UTC),
+			PeriodEnd:   time.Date(2021, time.March, 23, 0, 0, 0, 0, time.UTC),
+			Date:        time.Date(2021, time.March, 22, 0, 0, 0, 0, time.UTC),
+			Result:      true,
+		},
+		{
+			PeriodStart: time.Date(2021, time.March, 21, 0, 0, 0, 0, time.UTC),
+			PeriodEnd:   time.Date(2021, time.March, 21, 0, 0, 0, 0, time.UTC),
+			Date:        time.Date(2021, time.March, 21, 0, 0, 0, 0, time.UTC),
+			Result:      true,
+		},
+		{
+			PeriodStart: time.Date(2021, time.March, 21, 0, 0, 0, 0, time.UTC),
+			PeriodEnd:   time.Date(2021, time.March, 23, 0, 0, 0, 0, time.UTC),
+			Date:        time.Date(2021, time.March, 23, 0, 0, 0, 0, time.UTC),
+			Result:      true,
+		},
+		{
+			PeriodStart: time.Date(2021, time.March, 21, 0, 0, 0, 0, time.UTC),
+			PeriodEnd:   time.Date(2021, time.March, 23, 0, 0, 0, 0, time.UTC),
+			Date:        time.Date(2021, time.March, 24, 0, 0, 0, 0, time.UTC),
+			Result:      false,
+		},
+		{
+			PeriodStart: time.Date(2021, time.March, 21, 0, 0, 0, 0, time.UTC),
+			PeriodEnd:   time.Date(2021, time.March, 23, 0, 0, 0, 0, time.UTC),
+			Date:        time.Date(2021, time.March, 20, 0, 0, 0, 0, time.UTC),
+			Result:      false,
+		},
+	}
+
+	for i, test := range testCases {
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			result := dateInPeriod(test.PeriodStart, test.PeriodEnd, test.Date)
+			if result != test.Result {
+				t.Fatalf("unexpected result: %v", result)
+			}
+		})
+	}
+}
+
 func TestGenerate(t *testing.T) {
 	testCases := []struct {
 		Description   string
@@ -142,6 +191,25 @@ func TestGenerate(t *testing.T) {
 * Jane has a special day labelled 'other'`,
 		},
 		{
+			Description: "it alerts on named special days",
+			Contacts: []map[string]interface{}{
+				{
+					"Display Name":      "John",
+					"JSON Special Days": `[{ "date": "fathers-day-uk", "label": "fathers-day-uk"}]`,
+				},
+				{
+					"Display Name":      "Jane",
+					"JSON Special Days": `[{ "date": "mothering-sunday", "label": "mothering-sunday"}]`,
+				},
+			},
+			CheckDate:     time.Date(2021, time.March, 1, 0, 0, 0, 0, time.UTC),
+			Period:        200, // just a big period to catch and test the above
+			Alert:         true,
+			ExpectedTitle: "John & Jane have special days",
+			ExpectedBody: `* John has a special day labelled 'fathers-day-uk'
+* Jane has a special day labelled 'mothering-sunday'`,
+		},
+		{
 			Description: "it alerts on birthdays and special days",
 			Contacts: []map[string]interface{}{
 				{
@@ -205,55 +273,6 @@ func TestGenerate(t *testing.T) {
 			}
 			if test.ExpectedBody != body {
 				t.Errorf("unexpected body:\ngot\n%v\nwant\n%v", body, test.ExpectedBody)
-			}
-		})
-	}
-}
-
-func TestDateInPeriod(t *testing.T) {
-	testCases := []struct {
-		PeriodStart time.Time
-		PeriodEnd   time.Time
-		Date        time.Time
-		Result      bool
-	}{
-		{
-			PeriodStart: time.Date(2021, time.March, 21, 0, 0, 0, 0, time.UTC),
-			PeriodEnd:   time.Date(2021, time.March, 23, 0, 0, 0, 0, time.UTC),
-			Date:        time.Date(2021, time.March, 22, 0, 0, 0, 0, time.UTC),
-			Result:      true,
-		},
-		{
-			PeriodStart: time.Date(2021, time.March, 21, 0, 0, 0, 0, time.UTC),
-			PeriodEnd:   time.Date(2021, time.March, 21, 0, 0, 0, 0, time.UTC),
-			Date:        time.Date(2021, time.March, 21, 0, 0, 0, 0, time.UTC),
-			Result:      true,
-		},
-		{
-			PeriodStart: time.Date(2021, time.March, 21, 0, 0, 0, 0, time.UTC),
-			PeriodEnd:   time.Date(2021, time.March, 23, 0, 0, 0, 0, time.UTC),
-			Date:        time.Date(2021, time.March, 23, 0, 0, 0, 0, time.UTC),
-			Result:      true,
-		},
-		{
-			PeriodStart: time.Date(2021, time.March, 21, 0, 0, 0, 0, time.UTC),
-			PeriodEnd:   time.Date(2021, time.March, 23, 0, 0, 0, 0, time.UTC),
-			Date:        time.Date(2021, time.March, 24, 0, 0, 0, 0, time.UTC),
-			Result:      false,
-		},
-		{
-			PeriodStart: time.Date(2021, time.March, 21, 0, 0, 0, 0, time.UTC),
-			PeriodEnd:   time.Date(2021, time.March, 23, 0, 0, 0, 0, time.UTC),
-			Date:        time.Date(2021, time.March, 20, 0, 0, 0, 0, time.UTC),
-			Result:      false,
-		},
-	}
-
-	for i, test := range testCases {
-		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
-			result := dateInPeriod(test.PeriodStart, test.PeriodEnd, test.Date)
-			if result != test.Result {
-				t.Fatalf("unexpected result: %v", result)
 			}
 		})
 	}

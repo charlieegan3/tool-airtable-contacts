@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"strings"
 	"time"
+
+	"github.com/charlieegan3/special-days/pkg/fathersday"
+	"github.com/charlieegan3/special-days/pkg/motheringsunday"
 )
 
 func Generate(contacts []map[string]interface{}, checkDate time.Time, period int) (bool, string, string, error) {
@@ -49,9 +52,22 @@ func Generate(contacts []map[string]interface{}, checkDate time.Time, period int
 				return false, "", "", fmt.Errorf("failed to parse JSON Special Days value for: %v", contact)
 			}
 			for _, day := range days {
-				date, err := time.Parse("2006-01-02", day.Date)
-				if err != nil {
-					return false, "", "", fmt.Errorf("failed to parse special day date value for: %v", contact)
+				var date time.Time
+				if day.Date == "fathers-day-uk" {
+					date, err = fathersday.FathersDay("uk", periodStart.Year())
+					if err != nil {
+						return false, "", "", fmt.Errorf("failed to get fathers day for: %v, %s", contact, err)
+					}
+				} else if day.Date == "mothering-sunday" {
+					date, err = motheringsunday.MotheringSunday(periodStart.Year())
+					if err != nil {
+						return false, "", "", fmt.Errorf("failed to get mothering sunday for: %v, %s", contact, err)
+					}
+				} else {
+					date, err = time.Parse("2006-01-02", day.Date)
+					if err != nil {
+						return false, "", "", fmt.Errorf("failed to parse special day date value for: %v, %s", contact, err)
+					}
 				}
 
 				dateThisYear := time.Date(time.Now().UTC().Year(), date.Month(), date.Day(), 0, 0, 0, 0, time.UTC)
