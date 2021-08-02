@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"log"
 	"time"
 
@@ -40,7 +41,7 @@ var weekCmd = &cobra.Command{
 		pushoverRecipient := psh.NewRecipient(viper.GetString("pushover.user_key"))
 		pushoverApp := psh.New(viper.GetString("pushover.app_token"))
 		if alert {
-			pushover.Notify(pushoverApp, pushoverRecipient, title, message)
+			pushover.Notify(pushoverApp, pushoverRecipient, fmt.Sprintf("Weekly Summary (%s)", title), message)
 		} else {
 			pushover.Notify(pushoverApp, pushoverRecipient, "No Events", "There are no events in the next two weeks")
 		}
