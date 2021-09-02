@@ -49,6 +49,7 @@ func TestGenerate(t *testing.T) {
 		ExpectedOutput string
 		// used when the field label order is not deterministic
 		ExpectedContains string
+		UseV3            bool
 	}{
 		{
 			Description: "it sets the name correctly",
@@ -57,6 +58,18 @@ func TestGenerate(t *testing.T) {
 			},
 			ExpectedOutput: `BEGIN:VCARD
 VERSION:4.0
+FN:John Appleseed
+N:Appleseed;John;;;
+END:VCARD`,
+		},
+		{
+			Description: "it can generate a v3 card",
+			UseV3:       true,
+			Fields: []map[string]interface{}{
+				{"Display Name": "John Appleseed"},
+			},
+			ExpectedOutput: `BEGIN:VCARD
+VERSION:3.0
 FN:John Appleseed
 N:Appleseed;John;;;
 END:VCARD`,
@@ -177,7 +190,7 @@ END:VCARD`,
 	for _, test := range testCases {
 		t.Run(test.Description, func(t *testing.T) {
 			// 25 is used here so the base64 data is small in the examples above
-			result, err := Generate(test.Fields, 25)
+			result, err := Generate(test.Fields, test.UseV3, 25)
 			// re-format generated string with \r for comparison in tests
 			result = strings.ReplaceAll(result, "\r", "")
 			if err != nil {

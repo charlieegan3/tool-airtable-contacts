@@ -48,7 +48,11 @@ var syncCmd = &cobra.Command{
 		}
 
 		// generate vcard for upload
-		vcardString, err := vcard.Generate(records, viper.GetInt("vcard.photo.size"))
+		vcardString, err := vcard.Generate(
+			records,
+			viper.GetBool("vcard.use_v3"),
+			viper.GetInt("vcard.photo.size"),
+		)
 
 		err = os.WriteFile("out.vcard", []byte(vcardString), 0644)
 		if err != nil {

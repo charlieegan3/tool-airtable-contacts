@@ -14,7 +14,7 @@ import (
 	govcard "github.com/emersion/go-vcard"
 )
 
-func Generate(contacts []map[string]interface{}, photoSize int) (string, error) {
+func Generate(contacts []map[string]interface{}, useV3 bool, photoSize int) (string, error) {
 	buf := bytes.NewBufferString("")
 	enc := govcard.NewEncoder(buf)
 
@@ -130,8 +130,14 @@ func Generate(contacts []map[string]interface{}, photoSize int) (string, error) 
 			}
 		}
 
+		// allow setting of the version
+		if useV3 {
+			card.SetValue(govcard.FieldVersion, "3.0")
+		} else {
+			govcard.ToV4(card)
+		}
+
 		// write the card to output
-		govcard.ToV4(card)
 		err = enc.Encode(card)
 		if err != nil {
 			return "", fmt.Errorf("failed to encode vcard: %s", err)
