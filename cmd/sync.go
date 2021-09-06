@@ -30,6 +30,8 @@ import (
 	"github.com/charlieegan3/airtable-contacts/pkg/vcard"
 )
 
+var syncDropbox bool
+
 // syncCmd represents the sync command
 var syncCmd = &cobra.Command{
 	Use:   "sync",
@@ -59,15 +61,20 @@ var syncCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		// store in dropbox for sync
-		dropboxClient := files.New(dbx.Config{
-			Token:    viper.GetString("dropbox.token"),
-			LogLevel: dbx.LogOff,
-		})
-		dropbox.Upload(dropboxClient, viper.GetString("dropbox.path"), []byte(vcardString))
+		if syncDropbox {
+			// store in dropbox for sync
+			dropboxClient := files.New(dbx.Config{
+				Token:    viper.GetString("dropbox.token"),
+				LogLevel: dbx.LogOff,
+			})
+			dropbox.Upload(dropboxClient, viper.GetString("dropbox.path"), []byte(vcardString))
+		} else {
+			log.Println("no sync targets set, nothing uploaded during sync")
+		}
 	},
 }
 
 func init() {
+	syncCmd.Flags().BoolVar(&syncDropbox, "dropbox", false, "if set, dropbox will be synced")
 	rootCmd.AddCommand(syncCmd)
 }
