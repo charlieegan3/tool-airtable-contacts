@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<D:multistatus xmlns:D="DAV:" xmlns:C="urn:ietf:params:xml:ns:carddav" xmlns:CS="http://calendarserver.org/ns/">
+  <D:response>
+    <D:href>/dav/addressbooks/user/user@example.com/Default/</D:href>
+    <D:propstat>
+      <D:prop>
+        <D:creationdate>2021-08-16T05:52:22Z</D:creationdate>
+        <D:displayname><![CDATA[personal]]></D:displayname>
+        <D:getcontentlength></D:getcontentlength>
+        <D:getcontenttype>text/vcard; charset=utf-8</D:getcontenttype>
+        <D:getetag>"1628199342-290-12"</D:getetag>
+        <D:getlastmodified>Mon, 06 Sep 2021 19:55:18 GMT</D:getlastmodified>
+        <D:resourcetype>
+          <D:collection/>
+          <C:addressbook/>
+        </D:resourcetype>
+        <CS:getctag>1628199342-215815</CS:getctag>
+      </D:prop>
+      <D:status>HTTP/1.1 200 OK</D:status>
+    </D:propstat>
+    <D:propstat>
+      <D:prop>
+        <D:getcontentlanguage/>
+        <D:lockdiscovery/>
+        <D:supportedlock/>
+      </D:prop>
+      <D:status>HTTP/1.1 404 Not Found</D:status>
+    </D:propstat>
+  </D:response>
+  <D:response>
+    <D:href>/dav/addressbooks/user/user@example.com/Default/6316e64d-176c-42bc-9d59-30ed53c1a06b.vcf</D:href>
+    <D:propstat>
+      <D:prop>
+        <D:creationdate>2021-09-04T10:24:03Z</D:creationdate>
+        <D:getcontentlength>288</D:getcontentlength>
+        <D:getcontenttype>text/vcard; charset=utf-8</D:getcontenttype>
+        <D:getetag>"368e79266138fb530ad811dfa35ed95e991168df"</D:getetag>
+        <D:getlastmodified>Sat, 04 Sep 2021 10:24:03 GMT</D:getlastmodified>
+        <D:lockdiscovery/>
+        <D:resourcetype/>
+        <D:supportedlock>
+          <D:lockentry>
+            <D:lockscope>
+              <D:exclusive/>
+            </D:lockscope>
+            <D:locktype>
+              <D:write/>
+            </D:locktype>
+          </D:lockentry>
+        </D:supportedlock>
+      </D:prop>
+      <D:status>HTTP/1.1 200 OK</D:status>
+    </D:propstat>
+    <D:propstat>
+      <D:prop>
+        <D:displayname/>
+        <D:getcontentlanguage/>
+        <CS:getctag/>
+      </D:prop>
+      <D:status>HTTP/1.1 404 Not Found</D:status>
+    </D:propstat>
+  </D:response>
+  <D:response>
+    <D:href>/dav/addressbooks/user/user@example.com/Default/a5fadfc4-27fc-459c-847d-c8dabe3f789e.vcf</D:href>
+    <D:propstat>
+      <D:prop>
+        <D:creationdate>2021-09-04T07:23:12Z</D:creationdate>
+        <D:getcontentlength>1051</D:getcontentlength>
+        <D:getcontenttype>text/vcard; charset=utf-8</D:getcontenttype>
+        <D:getetag>"365894c4eeceff485954211cf0b946abe453e81c"</D:getetag>
+        <D:getlastmodified>Mon, 06 Sep 2021 14:43:20 GMT</D:getlastmodified>
+        <D:lockdiscovery/>
+        <D:resourcetype/>
+        <D:supportedlock>
+          <D:lockentry>
+            <D:lockscope>
+              <D:exclusive/>
+            </D:lockscope>
+            <D:locktype>
+              <D:write/>
+            </D:locktype>
+          </D:lockentry>
+        </D:supportedlock>
+      </D:prop>
+      <D:status>HTTP/1.1 200 OK</D:status>
+    </D:propstat>
+    <D:propstat>
+      <D:prop>
+        <D:displayname/>
+        <D:getcontentlanguage/>
+        <CS:getctag/>
+      </D:prop>
+      <D:status>HTTP/1.1 404 Not Found</D:status>
+    </D:propstat>
+  </D:response>
+</D:multistatus>

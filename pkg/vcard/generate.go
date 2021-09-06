@@ -14,7 +14,7 @@ import (
 	govcard "github.com/emersion/go-vcard"
 )
 
-func Generate(contacts []map[string]interface{}, useV3 bool, photoSize int) (string, error) {
+func Generate(contacts []map[string]interface{}, useV3 bool, photoSize int, id string) (string, error) {
 	buf := bytes.NewBufferString("")
 	enc := govcard.NewEncoder(buf)
 
@@ -128,6 +128,11 @@ func Generate(contacts []map[string]interface{}, useV3 bool, photoSize int) (str
 					}
 				}
 			}
+		}
+
+		// optionally, set the ID
+		if id != "" {
+			card.SetValue("UID", id)
 		}
 
 		// allow setting of the version

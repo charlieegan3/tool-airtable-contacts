@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/andreyvit/diff v0.0.0-20170406064948-c7f18ee00883 // indirect
+	github.com/antchfx/xmlquery v1.3.6 // indirect
 	github.com/armon/consul-api v0.0.0-20180202201655-eb2c6b5be1b6 // indirect
 	github.com/charlieegan3/special-days v0.0.0-20210701231319-175bc74510e3 // indirect
 	github.com/coreos/go-etcd v2.0.0+incompatible // indirect
@@ -14,7 +15,9 @@ require (
 	github.com/emersion/go-vcard v0.0.0-20210521075357-3445b9171995 // indirect
 	github.com/fsnotify/fsnotify v1.4.7 // indirect
 	github.com/gregdel/pushover v1.1.0 // indirect
+	github.com/maxatome/go-testdeep v1.10.0 // indirect
 	github.com/mehanizm/airtable v0.2.4 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
 	github.com/sergi/go-diff v1.2.0 // indirect
 	github.com/spf13/cobra v1.1.3 // indirect
 	github.com/spf13/viper v1.7.0 // indirect

@@ -50,6 +50,7 @@ func TestGenerate(t *testing.T) {
 		// used when the field label order is not deterministic
 		ExpectedContains string
 		UseV3            bool
+		ID               string
 	}{
 		{
 			Description: "it sets the name correctly",
@@ -185,12 +186,25 @@ END:VCARD`,
 			},
 			ExpectedContains: `/9j/2wCEAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDIBCQkJDAsMGA0NGDIhHCEyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMv/AABEIABkAGQMBIgACEQEDEQH/xAGiAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgsQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+gEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoLEQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4+Tl5ufo6ery8/T19vf4+fr/2gAMAwEAAhEDEQA/APHo4hKVRQWbsAMk13HgzwvcW2qLq98rQR2y7o4mHzSFgQDjsuD/ACpnw902HzptQnxuQhIycjaepI9+g/Ouy1C8+xRi6gVSq5WUbuQD0z+OKybd7IqMdLs5PxpNp8ujm0tHjfFwrFo02jdggj361wX2b3ro9e1JbmZrfAXZJufjo2MEfzrEyPWmtCXqzrtIa8TQpJYrc+T52Fk6Ddjke9aMN3eXGnXaQ6beyssYUKsDYkJPOCRjgfnXUeEP+QRafRf610i/6kfVqydTlexoo6Hmh8Ate3Ml3cTyQRTuZFGxUZcn7rBjwfpxTv8AhXVj/wBBKX/xyurn+5c/7w/9BFc1Ue0Y+VI//9k=`,
 		},
+		{
+			Description: "it sets the id if present",
+			Fields: []map[string]interface{}{
+				{"Display Name": "John Appleseed"},
+			},
+			ID: "example",
+			ExpectedOutput: `BEGIN:VCARD
+VERSION:4.0
+FN:John Appleseed
+N:Appleseed;John;;;
+UID:example
+END:VCARD`,
+		},
 	}
 
 	for _, test := range testCases {
 		t.Run(test.Description, func(t *testing.T) {
 			// 25 is used here so the base64 data is small in the examples above
-			result, err := Generate(test.Fields, test.UseV3, 25)
+			result, err := Generate(test.Fields, test.UseV3, 25, test.ID)
 			// re-format generated string with \r for comparison in tests
 			result = strings.ReplaceAll(result, "\r", "")
 			if err != nil {

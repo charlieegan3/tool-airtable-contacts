@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="utf-8"?>
+<D:multistatus xmlns:D="DAV:" xmlns:C="urn:ietf:params:xml:ns:carddav" xmlns:CS="http://calendarserver.org/ns/">
+  <D:response>
+    <D:href>/dav/addressbooks/user/charlieegan3@fastmail.com/Default/</D:href>
+    <D:propstat>
+      <D:prop>
+        <D:creationdate>2021-08-16T05:52:22Z</D:creationdate>
+        <D:displayname><![CDATA[personal]]></D:displayname>
+        <D:getcontentlength></D:getcontentlength>
+        <D:getcontenttype>text/vcard; charset=utf-8</D:getcontenttype>
+        <D:getetag>"1628199342-290-12"</D:getetag>
+        <D:getlastmodified>Mon, 06 Sep 2021 19:55:18 GMT</D:getlastmodified>
+        <D:resourcetype>
+          <D:collection/>
+          <C:addressbook/>
+        </D:resourcetype>
+        <CS:getctag>1628199342-215815</CS:getctag>
+      </D:prop>
+      <D:status>HTTP/1.1 200 OK</D:status>
+    </D:propstat>
+    <D:propstat>
+      <D:prop>
+        <D:getcontentlanguage/>
+        <D:lockdiscovery/>
+        <D:supportedlock/>
+      </D:prop>
+      <D:status>HTTP/1.1 404 Not Found</D:status>
+    </D:propstat>
+  </D:response>
+  <D:response>
+    <D:href>/dav/addressbooks/user/charlieegan3@fastmail.com/Default/6316e64d-176c-42bc-9d59-30ed53c1a06b.vcf</D:href>
+    <D:propstat>
+      <D:prop>
+        <D:creationdate>2021-09-04T10:24:03Z</D:creationdate>
+        <D:getcontentlength>288</D:getcontentlength>
+        <D:getcontenttype>text/vcard; charset=utf-8</D:getcontenttype>
+        <D:getetag>"368e79266138fb530ad811dfa35ed95e991168df"</D:getetag>
+        <D:getlastmodified>Sat, 04 Sep 2021 10:24:03 GMT</D:getlastmodified>
+        <D:lockdiscovery/>
+        <D:resourcetype/>
+        <D:supportedlock>
+          <D:lockentry>
+            <D:lockscope>
+              <D:exclusive/>
+            </D:lockscope>
+            <D:locktype>
+              <D:write/>
+            </D:locktype>
+          </D:lockentry>
+        </D:supportedlock>
+      </D:prop>
+      <D:status>HTTP/1.1 200 OK</D:status>
+    </D:propstat>
+    <D:propstat>
+      <D:prop>
+        <D:displayname/>
+        <D:getcontentlanguage/>
+        <CS:getctag/>
+      </D:prop>
+      <D:status>HTTP/1.1 404 Not Found</D:status>
+    </D:propstat>
+  </D:response>
+  <D:response>
+    <D:href>/dav/addressbooks/user/charlieegan3@fastmail.com/Default/a5fadfc4-27fc-459c-847d-c8dabe3f789e.vcf</D:href>
+    <D:propstat>
+      <D:prop>
+        <D:creationdate>2021-09-04T07:23:12Z</D:creationdate>
+        <D:getcontentlength>1051</D:getcontentlength>
+        <D:getcontenttype>text/vcard; charset=utf-8</D:getcontenttype>
+        <D:getetag>"365894c4eeceff485954211cf0b946abe453e81c"</D:getetag>
+        <D:getlastmodified>Mon, 06 Sep 2021 14:43:20 GMT</D:getlastmodified>
+        <D:lockdiscovery/>
+        <D:resourcetype/>
+        <D:supportedlock>
+          <D:lockentry>
+            <D:lockscope>
+              <D:exclusive/>
+            </D:lockscope>
+            <D:locktype>
+              <D:write/>
+            </D:locktype>
+          </D:lockentry>
+        </D:supportedlock>
+      </D:prop>
+      <D:status>HTTP/1.1 200 OK</D:status>
+    </D:propstat>
+    <D:propstat>
+      <D:prop>
+        <D:displayname/>
+        <D:getcontentlanguage/>
+        <CS:getctag/>
+      </D:prop>
+      <D:status>HTTP/1.1 404 Not Found</D:status>
+    </D:propstat>
+  </D:response>
+  <D:response>
+    <D:href>/dav/addressbooks/user/charlieegan3@fastmail.com/Default/0dc02da7-7824-40a4-b665-4a87da899e41.vcf</D:href>
+    <D:propstat>
+      <D:prop>
+        <D:creationdate>2021-09-06T14:43:20Z</D:creationdate>
+        <D:getcontentlength>297</D:getcontentlength>
+        <D:getcontenttype>text/vcard; charset=utf-8</D:getcontenttype>
+        <D:getetag>"7e09b409e03cee4599d848c5580307c677a0314a"</D:getetag>
+        <D:getlastmodified>Mon, 06 Sep 2021 14:43:20 GMT</D:getlastmodified>
+        <D:lockdiscovery/>
+        <D:resourcetype/>
+        <D:supportedlock>
+          <D:lockentry>
+            <D:lockscope>
+              <D:exclusive/>
+            </D:lockscope>
+            <D:locktype>
+              <D:write/>
+            </D:locktype>
+          </D:lockentry>
+        </D:supportedlock>
+      </D:prop>
+      <D:status>HTTP/1.1 200 OK</D:status>
+    </D:propstat>
+    <D:propstat>
+      <D:prop>
+        <D:displayname/>
+        <D:getcontentlanguage/>
+        <CS:getctag/>
+      </D:prop>
+      <D:status>HTTP/1.1 404 Not Found</D:status>
+    </D:propstat>
+  </D:response>
+  <D:response>
+    <D:href>/dav/addressbooks/user/charlieegan3@fastmail.com/Default/0083b53f-e51f-4bd1-b15d-977e66f4a5f6.vcf</D:href>
+    <D:propstat>
+      <D:prop>
+        <D:creationdate>2021-09-06T14:42:40Z</D:creationdate>
+        <D:getcontentlength>306</D:getcontentlength>
+        <D:getcontenttype>text/vcard; charset=utf-8</D:getcontenttype>
+        <D:getetag>"73f77f3b7dc68d5c8a4e1199dfe0c079a03225e5"</D:getetag>
+        <D:getlastmodified>Mon, 06 Sep 2021 14:42:40 GMT</D:getlastmodified>
+        <D:lockdiscovery/>
+        <D:resourcetype/>
+        <D:supportedlock>
+          <D:lockentry>
+            <D:lockscope>
+              <D:exclusive/>
+            </D:lockscope>
+            <D:locktype>
+              <D:write/>
+            </D:locktype>
+          </D:lockentry>
+        </D:supportedlock>
+      </D:prop>
+      <D:status>HTTP/1.1 200 OK</D:status>
+    </D:propstat>
+    <D:propstat>
+      <D:prop>
+        <D:displayname/>
+        <D:getcontentlanguage/>
+        <CS:getctag/>
+      </D:prop>
+      <D:status>HTTP/1.1 404 Not Found</D:status>
+    </D:propstat>
+  </D:response>
+  <D:response>
+    <D:href>/dav/addressbooks/user/charlieegan3@fastmail.com/Default/b2f6d7e0-372a-41b0-8b19-72f99dd62620.vcf</D:href>
+    <D:propstat>
+      <D:prop>
+        <D:creationdate>2021-09-06T08:24:39Z</D:creationdate>
+        <D:getcontentlength>272</D:getcontentlength>
+        <D:getcontenttype>text/vcard; charset=utf-8</D:getcontenttype>
+        <D:getetag>"62ba22b5b9d273f4dd184349bdcc72559e9d15af"</D:getetag>
+        <D:getlastmodified>Mon, 06 Sep 2021 08:24:39 GMT</D:getlastmodified>
+        <D:lockdiscovery/>
+        <D:resourcetype/>
+        <D:supportedlock>
+          <D:lockentry>
+            <D:lockscope>
+              <D:exclusive/>
+            </D:lockscope>
+            <D:locktype>
+              <D:write/>
+            </D:locktype>
+          </D:lockentry>
+        </D:supportedlock>
+      </D:prop>
+      <D:status>HTTP/1.1 200 OK</D:status>
+    </D:propstat>
+    <D:propstat>
+      <D:prop>
+        <D:displayname/>
+        <D:getcontentlanguage/>
+        <CS:getctag/>
+      </D:prop>
+      <D:status>HTTP/1.1 404 Not Found</D:status>
+    </D:propstat>
+  </D:response>
+  <D:response>
+    <D:href>/dav/addressbooks/user/charlieegan3@fastmail.com/Default/b25289e1-56bb-4bab-84a4-7d9d0ac6c3c6.vcf</D:href>
+    <D:propstat>
+      <D:prop>
+        <D:creationdate>2021-09-04T07:23:12Z</D:creationdate>
+        <D:getcontentlength>298</D:getcontentlength>
+        <D:getcontenttype>text/vcard; charset=utf-8</D:getcontenttype>
+        <D:getetag>"b6b285d3ffc210431b273080f00754d684faf769"</D:getetag>
+        <D:getlastmodified>Sat, 04 Sep 2021 10:20:48 GMT</D:getlastmodified>
+        <D:lockdiscovery/>
+        <D:resourcetype/>
+        <D:supportedlock>
+          <D:lockentry>
+            <D:lockscope>
+              <D:exclusive/>
+            </D:lockscope>
+            <D:locktype>
+              <D:write/>
+            </D:locktype>
+          </D:lockentry>
+        </D:supportedlock>
+      </D:prop>
+      <D:status>HTTP/1.1 200 OK</D:status>
+    </D:propstat>
+    <D:propstat>
+      <D:prop>
+        <D:displayname/>
+        <D:getcontentlanguage/>
+        <CS:getctag/>
+      </D:prop>
+      <D:status>HTTP/1.1 404 Not Found</D:status>
+    </D:propstat>
+  </D:response>
+  <D:response>
+    <D:href>/dav/addressbooks/user/charlieegan3@fastmail.com/Default/b9ab1c95-28f9-4037-9787-125792b31e4b.vcf</D:href>
+    <D:propstat>
+      <D:prop>
+        <D:creationdate>2021-09-04T07:36:58Z</D:creationdate>
+        <D:getcontentlength>298</D:getcontentlength>
+        <D:getcontenttype>text/vcard; charset=utf-8</D:getcontenttype>
+        <D:getetag>"31e0be57d798929f439c07a0baf655fcde0fcabe"</D:getetag>
+        <D:getlastmodified>Sat, 04 Sep 2021 07:36:58 GMT</D:getlastmodified>
+        <D:lockdiscovery/>
+        <D:resourcetype/>
+        <D:supportedlock>
+          <D:lockentry>
+            <D:lockscope>
+              <D:exclusive/>
+            </D:lockscope>
+            <D:locktype>
+              <D:write/>
+            </D:locktype>
+          </D:lockentry>
+        </D:supportedlock>
+      </D:prop>
+      <D:status>HTTP/1.1 200 OK</D:status>
+    </D:propstat>
+    <D:propstat>
+      <D:prop>
+        <D:displayname/>
+        <D:getcontentlanguage/>
+        <CS:getctag/>
+      </D:prop>
+      <D:status>HTTP/1.1 404 Not Found</D:status>
+    </D:propstat>
+  </D:response>
+  <D:response>
+    <D:href>/dav/addressbooks/user/charlieegan3@fastmail.com/Default/56d7daf2-cf7c-4c59-a8c9-fc75bcd472f5.vcf</D:href>
+    <D:propstat>
+      <D:prop>
+        <D:creationdate>2021-09-04T07:27:50Z</D:creationdate>
+        <D:getcontentlength>317</D:getcontentlength>
+        <D:getcontenttype>text/vcard; charset=utf-8</D:getcontenttype>
+        <D:getetag>"dd5faafa0756bb00dcb3ea8a63cd27cd82455d62"</D:getetag>
+        <D:getlastmodified>Sat, 04 Sep 2021 07:27:50 GMT</D:getlastmodified>
+        <D:lockdiscovery/>
+        <D:resourcetype/>
+        <D:supportedlock>
+          <D:lockentry>
+            <D:lockscope>
+              <D:exclusive/>
+            </D:lockscope>
+            <D:locktype>
+              <D:write/>
+            </D:locktype>
+          </D:lockentry>
+        </D:supportedlock>
+      </D:prop>
+      <D:status>HTTP/1.1 200 OK</D:status>
+    </D:propstat>
+    <D:propstat>
+      <D:prop>
+        <D:displayname/>
+        <D:getcontentlanguage/>
+        <CS:getctag/>
+      </D:prop>
+      <D:status>HTTP/1.1 404 Not Found</D:status>
+    </D:propstat>
+  </D:response>
+  <D:response>
+    <D:href>/dav/addressbooks/user/charlieegan3@fastmail.com/Default/8324717f-e269-42ed-a3cd-34ca67015137.vcf</D:href>
+    <D:propstat>
+      <D:prop>
+        <D:creationdate>2021-09-04T07:26:13Z</D:creationdate>
+        <D:getcontentlength>319</D:getcontentlength>
+        <D:getcontenttype>text/vcard; charset=utf-8</D:getcontenttype>
+        <D:getetag>"539f537c3a2ccbd4d83930d5f6a4f1e7f4a9fc11"</D:getetag>
+        <D:getlastmodified>Sat, 04 Sep 2021 07:26:13 GMT</D:getlastmodified>
+        <D:lockdiscovery/>
+        <D:resourcetype/>
+        <D:supportedlock>
+          <D:lockentry>
+            <D:lockscope>
+              <D:exclusive/>
+            </D:lockscope>
+            <D:locktype>
+              <D:write/>
+            </D:locktype>
+          </D:lockentry>
+        </D:supportedlock>
+      </D:prop>
+      <D:status>HTTP/1.1 200 OK</D:status>
+    </D:propstat>
+    <D:propstat>
+      <D:prop>
+        <D:displayname/>
+        <D:getcontentlanguage/>
+        <CS:getctag/>
+      </D:prop>
+      <D:status>HTTP/1.1 404 Not Found</D:status>
+    </D:propstat>
+  </D:response>
+  <D:response>
+    <D:href>/dav/addressbooks/user/charlieegan3@fastmail.com/Default/974a80c2-c4f9-4f86-a0ad-f634d927b436.vcf</D:href>
+    <D:propstat>
+      <D:prop>
+        <D:creationdate>2021-09-04T07:25:37Z</D:creationdate>
+        <D:getcontentlength>313</D:getcontentlength>
+        <D:getcontenttype>text/vcard; charset=utf-8</D:getcontenttype>
+        <D:getetag>"b026078f52f3998f7e5a108bc6a4eb6c1ca35f68"</D:getetag>
+        <D:getlastmodified>Sat, 04 Sep 2021 07:25:37 GMT</D:getlastmodified>
+        <D:lockdiscovery/>
+        <D:resourcetype/>
+        <D:supportedlock>
+          <D:lockentry>
+            <D:lockscope>
+              <D:exclusive/>
+            </D:lockscope>
+            <D:locktype>
+              <D:write/>
+            </D:locktype>
+          </D:lockentry>
+        </D:supportedlock>
+      </D:prop>
+      <D:status>HTTP/1.1 200 OK</D:status>
+    </D:propstat>
+    <D:propstat>
+      <D:prop>
+        <D:displayname/>
+        <D:getcontentlanguage/>
+        <CS:getctag/>
+      </D:prop>
+      <D:status>HTTP/1.1 404 Not Found</D:status>
+    </D:propstat>
+  </D:response>
+  <D:response>
+    <D:href>/dav/addressbooks/user/charlieegan3@fastmail.com/Default/6639f566-d597-4de2-902a-aebc54acb052.vcf</D:href>
+    <D:propstat>
+      <D:prop>
+        <D:creationdate>2021-09-04T07:24:30Z</D:creationdate>
+        <D:getcontentlength>299</D:getcontentlength>
+        <D:getcontenttype>text/vcard; charset=utf-8</D:getcontenttype>
+        <D:getetag>"9cf4a3996cafb2bf0bc581a1e910d9bf0843e819"</D:getetag>
+        <D:getlastmodified>Sat, 04 Sep 2021 07:24:30 GMT</D:getlastmodified>
+        <D:lockdiscovery/>
+        <D:resourcetype/>
+        <D:supportedlock>
+          <D:lockentry>
+            <D:lockscope>
+              <D:exclusive/>
+            </D:lockscope>
+            <D:locktype>
+              <D:write/>
+            </D:locktype>
+          </D:lockentry>
+        </D:supportedlock>
+      </D:prop>
+      <D:status>HTTP/1.1 200 OK</D:status>
+    </D:propstat>
+    <D:propstat>
+      <D:prop>
+        <D:displayname/>
+        <D:getcontentlanguage/>
+        <CS:getctag/>
+      </D:prop>
+      <D:status>HTTP/1.1 404 Not Found</D:status>
+    </D:propstat>
+  </D:response>
+  <D:response>
+    <D:href>/dav/addressbooks/user/charlieegan3@fastmail.com/Default/1e771cd4-3af8-4e94-b4ed-1173399ed868.vcf</D:href>
+    <D:propstat>
+      <D:prop>
+        <D:creationdate>2021-09-04T07:23:30Z</D:creationdate>
+        <D:getcontentlength>308</D:getcontentlength>
+        <D:getcontenttype>text/vcard; charset=utf-8</D:getcontenttype>
+        <D:getetag>"fedb3da8e21308602b870e2eed1b2674f8cc2f05"</D:getetag>
+        <D:getlastmodified>Sat, 04 Sep 2021 07:23:30 GMT</D:getlastmodified>
+        <D:lockdiscovery/>
+        <D:resourcetype/>
+        <D:supportedlock>
+          <D:lockentry>
+            <D:lockscope>
+              <D:exclusive/>
+            </D:lockscope>
+            <D:locktype>
+              <D:write/>
+            </D:locktype>
+          </D:lockentry>
+        </D:supportedlock>
+      </D:prop>
+      <D:status>HTTP/1.1 200 OK</D:status>
+    </D:propstat>
+    <D:propstat>
+      <D:prop>
+        <D:displayname/>
+        <D:getcontentlanguage/>
+        <CS:getctag/>
+      </D:prop>
+      <D:status>HTTP/1.1 404 Not Found</D:status>
+    </D:propstat>
+  </D:response>
+</D:multistatus>
