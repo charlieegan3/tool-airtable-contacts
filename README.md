@@ -1,15 +1,19 @@
 # airtable-contacts
 
-This is a binary with functionality to sync a contact database from Airtable.
+This is a binary with functionality to sync a custom contact database from
+Airtable.
 
-It's not likely this will have any useful functionality for anyone other than
-the author.
+**Note:** It's not likely this will have any useful functionality for anyone
+other than the author.
 
 Current functionality:
 
 * Download contact data
-* Generate vCard file
-* Upload card to location in Dropbox
+* Generate vCard file for one or more contacts
+* Sync the contacts to
+  * carddav server
+  * Dropbox location
+  * Local file
 
 Example config file:
 
@@ -25,4 +29,8 @@ vcard:
 dropbox:
   path: /contacts.vcard
   token: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+carddav:
+  serverURL: https://example.com/dav/addressbooks/user/user@example.com/Default
+  user: user@example.com
+  password: xxxxxxxxxxxxxxxx
 ```
