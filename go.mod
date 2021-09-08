@@ -6,6 +6,7 @@ require (
 	github.com/andreyvit/diff v0.0.0-20170406064948-c7f18ee00883 // indirect
 	github.com/antchfx/xmlquery v1.3.6 // indirect
 	github.com/armon/consul-api v0.0.0-20180202201655-eb2c6b5be1b6 // indirect
+	github.com/cenkalti/backoff/v4 v4.1.1 // indirect
 	github.com/charlieegan3/special-days v0.0.0-20210701231319-175bc74510e3 // indirect
 	github.com/coreos/go-etcd v2.0.0+incompatible // indirect
 	github.com/cpuguy83/go-md2man v1.0.10 // indirect
