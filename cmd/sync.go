@@ -82,7 +82,12 @@ var syncCmd = &cobra.Command{
 			dropbox.Upload(dropboxClient, viper.GetString("dropbox.path"), []byte(vcardString))
 		}
 		if syncFile {
-			err = os.WriteFile("out.vcard", []byte(vcardString), 0644)
+			outputPath := viper.GetString("local.outputPath")
+			if outputPath == "" {
+				outputPath = "output.vcard"
+			}
+
+			err = os.WriteFile(outputPath, []byte(vcardString), 0644)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -93,6 +98,6 @@ var syncCmd = &cobra.Command{
 func init() {
 	syncCmd.Flags().BoolVar(&syncDropbox, "dropbox", false, "if set, dropbox will be synced")
 	syncCmd.Flags().BoolVar(&syncCardDAV, "carddav", false, "if set, carddav will be synced")
-	syncCmd.Flags().BoolVar(&syncFile, "file", false, "if set, local will saved")
+	syncCmd.Flags().BoolVar(&syncFile, "file", false, "if set, local will saved at the path set in config, default: output.vcard")
 	rootCmd.AddCommand(syncCmd)
 }
