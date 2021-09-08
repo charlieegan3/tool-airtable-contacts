@@ -1,12 +1,15 @@
 package carddav
 
 import (
+	"bytes"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"strings"
 
 	"github.com/antchfx/xmlquery"
+	"github.com/cenkalti/backoff/v4"
 	"github.com/pkg/errors"
 )
 
@@ -18,28 +21,44 @@ type Client struct {
 }
 
 func (c *Client) List() (items []string, err error) {
-	req, err := http.NewRequest("PROPFIND", c.URL, nil)
+	var body []byte
+	operation := func() error {
+		req, err := http.NewRequest("PROPFIND", c.URL, nil)
+		if err != nil {
+			return errors.Wrap(err, "failed to make PROPFIND request to list items in carddav endpoint")
+		}
+		req.SetBasicAuth(c.User, c.Password)
+		req.Header.Add("Depth", "1")
+
+		resp, err := http.DefaultClient.Do(req)
+		if err != nil {
+			return errors.Wrap(err, "failed to make request")
+		}
+		defer resp.Body.Close()
+
+		if resp.StatusCode > 399 || resp.StatusCode < 100 {
+			return fmt.Errorf("server returned error: %d", resp.StatusCode)
+		}
+
+		body, err = io.ReadAll(resp.Body)
+		if err != nil {
+			return errors.Wrap(err, "failed to read request body")
+		}
+
+		return nil
+	}
+
+	b := backoff.NewExponentialBackOff()
+
+	err = backoff.Retry(operation, b)
 	if err != nil {
-		return items, errors.Wrap(err, "failed to make PROPFIND request to list items in carddav endpoint")
-	}
-	req.SetBasicAuth(c.User, c.Password)
-	req.Header.Add("Depth", "1")
-
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return items, errors.Wrap(err, "failed to make request")
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode > 399 || resp.StatusCode < 100 {
-		return items, errors.Wrap(err, "server returned error: ")
+		return items, errors.Wrap(err, "failed to list carddav items after backoff")
 	}
 
-	doc, err := xmlquery.Parse(resp.Body)
+	doc, err := xmlquery.Parse(bytes.NewReader(body))
 	if err != nil {
 		return items, errors.Wrap(err, "failed parse body as xml")
 	}
-
 	list, err := xmlquery.QueryAll(doc, "D:multistatus/D:response/D:href")
 	if err != nil {
 		return items, errors.Wrap(err, "failed to query body for hrefs")
