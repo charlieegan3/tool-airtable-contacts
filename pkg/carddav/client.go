@@ -1,10 +1,8 @@
 package carddav
 
 import (
-	"bytes"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"strings"
 
@@ -21,41 +19,20 @@ type Client struct {
 }
 
 func (c *Client) List() (items []string, err error) {
-	var body []byte
-	operation := func() error {
-		req, err := http.NewRequest("PROPFIND", c.URL, nil)
-		if err != nil {
-			return errors.Wrap(err, "failed to make PROPFIND request to list items in carddav endpoint")
-		}
-		req.SetBasicAuth(c.User, c.Password)
-		req.Header.Add("Depth", "1")
-
-		resp, err := http.DefaultClient.Do(req)
-		if err != nil {
-			return errors.Wrap(err, "failed to make request")
-		}
-		defer resp.Body.Close()
-
-		if resp.StatusCode > 399 || resp.StatusCode < 100 {
-			return fmt.Errorf("server returned error: %d", resp.StatusCode)
-		}
-
-		body, err = io.ReadAll(resp.Body)
-		if err != nil {
-			return errors.Wrap(err, "failed to read request body")
-		}
-
-		return nil
-	}
-
-	b := backoff.NewExponentialBackOff()
-
-	err = backoff.Retry(operation, b)
+	body, err := c.do(
+		c.URL,
+		"PROPFIND",
+		map[string]string{
+			"Depth": "1",
+		},
+		nil,
+	)
 	if err != nil {
-		return items, errors.Wrap(err, "failed to list carddav items after backoff")
+		return items, errors.Wrap(err, "failed to list carddav")
 	}
+	defer body.Close()
 
-	doc, err := xmlquery.Parse(bytes.NewReader(body))
+	doc, err := xmlquery.Parse(body)
 	if err != nil {
 		return items, errors.Wrap(err, "failed parse body as xml")
 	}
@@ -78,51 +55,76 @@ func (c *Client) List() (items []string, err error) {
 }
 
 func (c *Client) Delete(id string) (err error) {
-	url := fmt.Sprintf("%s/%s.vcf", strings.TrimSuffix(c.URL, "/"), id)
-
-	req, err := http.NewRequest("DELETE", url, nil)
+	body, err := c.do(
+		fmt.Sprintf("%s/%s.vcf", strings.TrimSuffix(c.URL, "/"), id),
+		"DELETE",
+		map[string]string{
+			"Depth": "1",
+		},
+		nil,
+	)
 	if err != nil {
-		return errors.Wrap(err, "failed to make DELETE request")
+		return errors.Wrap(err, "failed to delete vcf")
 	}
-	req.SetBasicAuth(c.User, c.Password)
 
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return errors.Wrap(err, "failed to make request")
-	}
-	defer resp.Body.Close()
+	defer body.Close()
 
-	if resp.StatusCode > 399 || resp.StatusCode < 100 {
-		return errors.Wrap(err, "server returned error: ")
-	}
 	return nil
 }
 
 func (c *Client) Put(id string, vcardData string) (err error) {
-	url := fmt.Sprintf("%s/%s.vcf", strings.TrimSuffix(c.URL, "/"), id)
-
-	req, err := http.NewRequest("PUT", url, strings.NewReader(vcardData))
+	body, err := c.do(
+		fmt.Sprintf("%s/%s.vcf", strings.TrimSuffix(c.URL, "/"), id),
+		"PUT",
+		map[string]string{
+			"Content-Type": "text/vcard",
+		},
+		strings.NewReader(vcardData),
+	)
 	if err != nil {
-		return errors.Wrap(err, "failed to make PUT request")
+		return errors.Wrap(err, "failed to put vcf file")
 	}
-	req.SetBasicAuth(c.User, c.Password)
-	req.Header.Add("Content-Type", "text/vcard")
-
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return errors.Wrap(err, "failed to make request")
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode > 399 || resp.StatusCode < 100 {
-		body, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			return errors.Wrap(err, "failed to read error body")
-		}
-		return fmt.Errorf("server returned error: %d, %s", resp.StatusCode, body)
-	}
+	defer body.Close()
 
 	return nil
+}
+
+func (c *Client) do(url string, verb string, headers map[string]string, requestBody io.Reader) (io.ReadCloser, error) {
+	var body io.ReadCloser
+	operation := func() error {
+		req, err := http.NewRequest(verb, url, requestBody)
+		if err != nil {
+			return errors.Wrap(err, "failed to make PROPFIND request to list items in carddav endpoint")
+		}
+
+		req.SetBasicAuth(c.User, c.Password)
+
+		for k, v := range headers {
+			req.Header.Add(k, v)
+		}
+
+		resp, err := http.DefaultClient.Do(req)
+		if err != nil {
+			return errors.Wrap(err, "failed to make request")
+		}
+
+		if resp.StatusCode > 399 || resp.StatusCode < 100 {
+			return fmt.Errorf("server returned error: %d", resp.StatusCode)
+		}
+
+		body = resp.Body
+
+		return nil
+	}
+
+	b := backoff.NewExponentialBackOff()
+
+	err := backoff.Retry(operation, b)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to list carddav items after backoff")
+	}
+
+	return body, nil
 }
 
 func extractID(fullPath string) (id string, err error) {
