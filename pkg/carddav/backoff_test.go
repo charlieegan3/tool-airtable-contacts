@@ -10,10 +10,10 @@ import (
 )
 
 func TestBackoff(t *testing.T) {
-	requestCount := 0
+	requestShouldFail := true
 	testServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		requestCount++
-		if requestCount < 2 {
+		if requestShouldFail {
+			requestShouldFail = false
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
