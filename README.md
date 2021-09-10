@@ -10,10 +10,7 @@ Current functionality:
 
 * Download contact data
 * Generate vCard file for one or more contacts
-* Sync the contacts to
-  * carddav server
-  * Dropbox location
-  * Local file
+* Sync the contacts to carddav server
 
 Example config file:
 
@@ -26,9 +23,6 @@ airtable:
 vcard:
   photo:
     size: 100
-dropbox:
-  path: /contacts.vcard
-  token: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 carddav:
   serverURL: https://example.com/dav/addressbooks/user/user@example.com/Default
   user: user@example.com
