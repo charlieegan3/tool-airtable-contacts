@@ -3,28 +3,19 @@ module github.com/charlieegan3/airtable-contacts
 go 1.16
 
 require (
-	github.com/andreyvit/diff v0.0.0-20170406064948-c7f18ee00883 // indirect
-	github.com/antchfx/xmlquery v1.3.6 // indirect
-	github.com/armon/consul-api v0.0.0-20180202201655-eb2c6b5be1b6 // indirect
-	github.com/cenkalti/backoff/v4 v4.1.1 // indirect
-	github.com/charlieegan3/special-days v0.0.0-20210701231319-175bc74510e3 // indirect
-	github.com/coreos/go-etcd v2.0.0+incompatible // indirect
-	github.com/cpuguy83/go-md2man v1.0.10 // indirect
-	github.com/d4l3k/messagediff v1.2.1 // indirect
-	github.com/disintegration/imaging v1.6.2 // indirect
-	github.com/dropbox/dropbox-sdk-go-unofficial/v6 v6.0.1 // indirect
-	github.com/emersion/go-vcard v0.0.0-20210521075357-3445b9171995 // indirect
-	github.com/fsnotify/fsnotify v1.4.7 // indirect
-	github.com/gregdel/pushover v1.1.0 // indirect
-	github.com/maxatome/go-testdeep v1.10.0 // indirect
-	github.com/mehanizm/airtable v0.2.4 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
+	github.com/andreyvit/diff v0.0.0-20170406064948-c7f18ee00883
+	github.com/antchfx/xmlquery v1.3.6
+	github.com/cenkalti/backoff/v4 v4.1.1
+	github.com/charlieegan3/special-days v0.0.0-20210701231319-175bc74510e3
+	github.com/disintegration/imaging v1.6.2
+	github.com/emersion/go-vcard v0.0.0-20210521075357-3445b9171995
+	github.com/gregdel/pushover v1.1.0
+	github.com/maxatome/go-testdeep v1.10.0
+	github.com/mehanizm/airtable v0.2.4
+	github.com/pkg/errors v0.9.1
 	github.com/sergi/go-diff v1.2.0 // indirect
-	github.com/spf13/cobra v1.1.3 // indirect
-	github.com/spf13/viper v1.7.0 // indirect
-	github.com/ugorji/go/codec v0.0.0-20181204163529-d75b2dcb6bc8 // indirect
-	github.com/xordataexchange/crypt v0.0.3-0.20170626215501-b2862e3d0a77 // indirect
+	github.com/spf13/cobra v1.1.3
+	github.com/spf13/viper v1.7.0
 	golang.org/x/image v0.0.0-20210628002857-a66eb6448b8d // indirect
-	gopkg.in/d4l3k/messagediff.v1 v1.2.1 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
+	golang.org/x/net v0.0.0-20201224014010-6772e930b67b // indirect
 )

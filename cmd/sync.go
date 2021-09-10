@@ -17,26 +17,19 @@ package cmd
 
 import (
 	"log"
-	"os"
 
-	dbx "github.com/dropbox/dropbox-sdk-go-unofficial/v6/dropbox"
-	"github.com/dropbox/dropbox-sdk-go-unofficial/v6/dropbox/files"
 	air "github.com/mehanizm/airtable"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
 	"github.com/charlieegan3/airtable-contacts/pkg/airtable"
 	"github.com/charlieegan3/airtable-contacts/pkg/carddav"
-	"github.com/charlieegan3/airtable-contacts/pkg/dropbox"
-	"github.com/charlieegan3/airtable-contacts/pkg/vcard"
 )
-
-var syncDropbox, syncCardDAV, syncFile bool
 
 // syncCmd represents the sync command
 var syncCmd = &cobra.Command{
 	Use:   "sync",
-	Short: "download data from airtable and upload to dropbox",
+	Short: "download data from airtable and upload to carddav server",
 	Run: func(cmd *cobra.Command, args []string) {
 		// get the latest data
 		airtableClient := air.NewClient(viper.GetString("airtable.key"))
@@ -50,54 +43,20 @@ var syncCmd = &cobra.Command{
 			log.Fatalf("failed to download contacts: %s", err)
 		}
 
-		// generate string for all contacts
-		vcardString, err := vcard.Generate(
-			records,
-			viper.GetBool("vcard.use_v3"),
-			viper.GetInt("vcard.photo.size"),
-			"",
-		)
+		cardDAVClient := carddav.Client{
+			URL:      viper.GetString("carddav.serverURL"),
+			User:     viper.GetString("carddav.user"),
+			Password: viper.GetString("carddav.password"),
+		}
+
+		// records passed as vcard sync is done on per contact basis
+		err = carddav.Sync(cardDAVClient, records)
 		if err != nil {
-			log.Fatal(err)
-		}
-
-		if syncCardDAV {
-			cardDAVClient := carddav.Client{
-				URL:      viper.GetString("carddav.serverURL"),
-				User:     viper.GetString("carddav.user"),
-				Password: viper.GetString("carddav.password"),
-			}
-
-			// records passed as vcard sync is done on per contact basis
-			err := carddav.Sync(cardDAVClient, records)
-			if err != nil {
-				log.Fatal(err)
-			}
-		}
-		if syncDropbox {
-			dropboxClient := files.New(dbx.Config{
-				Token:    viper.GetString("dropbox.token"),
-				LogLevel: dbx.LogOff,
-			})
-			dropbox.Upload(dropboxClient, viper.GetString("dropbox.path"), []byte(vcardString))
-		}
-		if syncFile {
-			outputPath := viper.GetString("local.outputPath")
-			if outputPath == "" {
-				outputPath = "output.vcard"
-			}
-
-			err = os.WriteFile(outputPath, []byte(vcardString), 0644)
-			if err != nil {
-				log.Fatal(err)
-			}
+			log.Fatalf("failed to upload to carddav: %s", err)
 		}
 	},
 }
 
 func init() {
-	syncCmd.Flags().BoolVar(&syncDropbox, "dropbox", false, "if set, dropbox will be synced")
-	syncCmd.Flags().BoolVar(&syncCardDAV, "carddav", false, "if set, carddav will be synced")
-	syncCmd.Flags().BoolVar(&syncFile, "file", false, "if set, local will saved at the path set in config, default: output.vcard")
 	rootCmd.AddCommand(syncCmd)
 }
