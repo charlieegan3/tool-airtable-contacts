@@ -83,6 +83,19 @@ func Generate(contacts []map[string]interface{}, useV3 bool, photoSize int, id s
 			}
 		}
 
+		// set addresses
+		if val, ok := contact["JSON Addresses"].(string); ok {
+			decoder := json.NewDecoder(strings.NewReader(val))
+			var addresses []govcard.Address
+			err := decoder.Decode(&addresses)
+			if err != nil {
+				return "", fmt.Errorf("failed to parse JSON addresses: %s", err)
+			}
+			for _, address := range addresses {
+				card.AddAddress(&address)
+			}
+		}
+
 		// set note
 		if val, ok := contact["Note"].(string); ok {
 			card.SetValue(govcard.FieldNote, val)
