@@ -41,9 +41,12 @@ var weekCmd = &cobra.Command{
 		pushoverRecipient := psh.NewRecipient(viper.GetString("pushover.user_key"))
 		pushoverApp := psh.New(viper.GetString("pushover.app_token"))
 		if alert {
-			pushover.Notify(pushoverApp, pushoverRecipient, fmt.Sprintf("Weekly Summary (%s)", title), message)
+			err = pushover.Notify(pushoverApp, pushoverRecipient, fmt.Sprintf("Weekly Summary (%s)", title), message)
 		} else {
-			pushover.Notify(pushoverApp, pushoverRecipient, "No Events", "There are no events in the next two weeks")
+			err = pushover.Notify(pushoverApp, pushoverRecipient, "No Events", "There are no events in the next two weeks")
+		}
+		if err != nil {
+			log.Fatalf("failed to send message: %s", err)
 		}
 	},
 }
