@@ -205,13 +205,13 @@ END:VCARD`,
 				{
 					"Display Name": "John Appleseed",
 					"JSON Addresses": `[
-				      {"ExtendedAddress":"","StreetAddress":"15 Whitby Road","Region":"London","PostalCode":"IV65NE","Country":"UK"},
+					  {"ExtendedAddress":"","StreetAddress":"15 Whitby Road","Locality":"Highgate", "Region":"London","PostalCode":"IV65NE","Country":"UK"},
 				      {"ExtendedAddress":"Flat 2","StreetAddress":"Sweden Road","Region":"Vaxjo","PostalCode":"12345","Country":"Sweden"}]`,
 				},
 			},
 			ExpectedOutput: `BEGIN:VCARD
 VERSION:4.0
-ADR:;;15 Whitby Road;;London;IV65NE;UK
+ADR:;;15 Whitby Road;Highgate;London;IV65NE;UK
 ADR:;Flat 2;Sweden Road;;Vaxjo;12345;Sweden
 FN:John Appleseed
 N:Appleseed;John;;;
