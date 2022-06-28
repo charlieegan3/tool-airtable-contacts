@@ -9,6 +9,7 @@ require (
 	github.com/charlieegan3/special-days v0.0.0-20210701231319-175bc74510e3
 	github.com/disintegration/imaging v1.6.2
 	github.com/emersion/go-vcard v0.0.0-20210521075357-3445b9171995
+	github.com/gomarkdown/markdown v0.0.0-20220627144906-e9a81102ebeb // indirect
 	github.com/gregdel/pushover v1.1.0
 	github.com/maxatome/go-testdeep v1.10.0
 	github.com/mehanizm/airtable v0.2.4

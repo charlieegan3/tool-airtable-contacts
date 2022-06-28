@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/charlieegan3/airtable-contacts/pkg/webhook"
+	"github.com/gomarkdown/markdown"
 	"log"
 	"time"
 
@@ -33,9 +34,9 @@ var weekCmd = &cobra.Command{
 
 		// set the notification period
 		periodStart := time.Date(time.Now().Year(), time.Now().Month(), time.Now().Day(), 0, 0, 0, 0, time.UTC)
-		alert, title, message, err := specialdays.Generate(records, periodStart, 14, false)
+		alert, title, body, err := specialdays.Generate(records, periodStart, 14, false)
 		if err != nil {
-			log.Fatalf("failed to generate alert message: %s", err)
+			log.Fatalf("failed to generate alert body: %s", err)
 		}
 
 		// send the alert if needed
@@ -49,17 +50,17 @@ var weekCmd = &cobra.Command{
 				pushoverApp,
 				pushoverRecipient,
 				title,
-				message,
+				body,
 			)
 			if err != nil {
-				log.Fatalf("failed to send message: %s", err)
+				log.Fatalf("failed to send body: %s", err)
 			}
 
 			// notify via webhook
 			err = webhook.Send(
 				viper.GetString("webhook.endpoint"),
 				title,
-				message,
+				string(markdown.ToHTML([]byte(body), nil, nil)),
 				"https://airtable.com",
 			)
 			if err != nil {
@@ -76,14 +77,15 @@ var weekCmd = &cobra.Command{
 				body,
 			)
 			if err != nil {
-				log.Fatalf("failed to send message: %s", err)
+				log.Fatalf("failed to send body: %s", err)
 			}
 
 			// notify via webhook
 			err = webhook.Send(
 				viper.GetString("webhook.endpoint"),
 				title,
-				body,
+
+				string(markdown.ToHTML([]byte(body), nil, nil)),
 				"https://airtable.com",
 			)
 			if err != nil {

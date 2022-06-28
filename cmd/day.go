@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/charlieegan3/airtable-contacts/pkg/webhook"
+	"github.com/gomarkdown/markdown"
 	"log"
 	"time"
 
@@ -33,7 +34,7 @@ var dayCmd = &cobra.Command{
 
 		// set the notification period
 		periodStart := time.Date(time.Now().Year(), time.Now().Month(), time.Now().Day()-1, 0, 0, 0, 0, time.UTC)
-		alert, title, message, err := specialdays.Generate(records, periodStart, 1, true)
+		alert, title, body, err := specialdays.Generate(records, periodStart, 1, true)
 		if err != nil {
 			log.Fatalf("failed to generate alert message: %s", err)
 		}
@@ -43,7 +44,7 @@ var dayCmd = &cobra.Command{
 			// notify via pushover
 			pushoverRecipient := psh.NewRecipient(viper.GetString("pushover.user_key"))
 			pushoverApp := psh.New(viper.GetString("pushover.app_token"))
-			err := pushover.Notify(pushoverApp, pushoverRecipient, title, message)
+			err := pushover.Notify(pushoverApp, pushoverRecipient, title, body)
 			if err != nil {
 				log.Fatalf("failed to send notification via pushover")
 			}
@@ -52,7 +53,7 @@ var dayCmd = &cobra.Command{
 			err = webhook.Send(
 				viper.GetString("webhook.endpoint"),
 				title,
-				message,
+				string(markdown.ToHTML([]byte(body), nil, nil)),
 				"https://airtable.com",
 			)
 			if err != nil {
