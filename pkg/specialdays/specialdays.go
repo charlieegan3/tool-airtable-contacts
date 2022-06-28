@@ -10,7 +10,7 @@ import (
 	"github.com/charlieegan3/special-days/pkg/motheringsunday"
 )
 
-func Generate(contacts []map[string]interface{}, checkDate time.Time, period int) (bool, string, string, error) {
+func Generate(contacts []map[string]interface{}, checkDate time.Time, period int, today bool) (bool, string, string, error) {
 	// likely invalid call, just return nothing
 	if period == 0 {
 		return false, "", "", nil
@@ -20,6 +20,7 @@ func Generate(contacts []map[string]interface{}, checkDate time.Time, period int
 	periodEnd := checkDate.Add(time.Duration(period) * time.Hour * 24).Add(-1 * time.Second)
 
 	contactsWithBirthdays := []string{}
+	birthdayMessages := []string{}
 	contactsWithSpecialDays := []string{}
 	specialDayMessages := []string{}
 
@@ -32,10 +33,23 @@ func Generate(contacts []map[string]interface{}, checkDate time.Time, period int
 				return false, "", "", fmt.Errorf("failed to parse birthday value for: %v", contact)
 			}
 
-			birthdayThisYear := time.Date(time.Now().UTC().Year(), birthday.Month(), birthday.Day(), 0, 0, 0, 0, time.UTC)
+			// calculate the birthday date for the year of the period start
+			birthdayInYearForPeriod := time.Date(
+				periodStart.Year(),
+				birthday.Month(),
+				birthday.Day(),
+				0, 0, 0, 0,
+				time.UTC,
+			)
 
-			if dateInPeriod(periodStart, periodEnd, birthdayThisYear) {
-				contactsWithBirthdays = append(contactsWithBirthdays, contact["Display Name"].(string))
+			if dateInPeriod(periodStart, periodEnd, birthdayInYearForPeriod) {
+				name := contact["Display Name"].(string)
+				contactsWithBirthdays = append(contactsWithBirthdays, name)
+				message := fmt.Sprintf("%s has a birthday", name)
+				if !today {
+					message = fmt.Sprintf("%s on %s", message, birthday.Format("January 02"))
+				}
+				birthdayMessages = append(birthdayMessages, message)
 			}
 		}
 
@@ -43,10 +57,10 @@ func Generate(contacts []map[string]interface{}, checkDate time.Time, period int
 		jsonSpecialDaysValue, ok := contact["JSON Special Days"].(string)
 		if ok {
 			decoder := json.NewDecoder(strings.NewReader(jsonSpecialDaysValue))
-			days := []struct {
+			var days []struct {
 				Label string `json:"label"`
 				Date  string `json:"date"`
-			}{}
+			}
 			err := decoder.Decode(&days)
 			if err != nil {
 				return false, "", "", fmt.Errorf("failed to parse JSON Special Days value for: %v", contact)
@@ -70,19 +84,21 @@ func Generate(contacts []map[string]interface{}, checkDate time.Time, period int
 					}
 				}
 
-				dateThisYear := time.Date(time.Now().UTC().Year(), date.Month(), date.Day(), 0, 0, 0, 0, time.UTC)
+				dateThisPeriod := time.Date(periodStart.Year(), date.Month(), date.Day(), 0, 0, 0, 0, time.UTC)
 
-				if dateInPeriod(periodStart, periodEnd, dateThisYear) {
+				if dateInPeriod(periodStart, periodEnd, dateThisPeriod) {
 					contactsWithSpecialDays = append(contactsWithSpecialDays, contact["Display Name"].(string))
-					specialDayMessages = append(
-						specialDayMessages,
-						fmt.Sprintf("%s has a special day labelled '%s'", contact["Display Name"].(string), day.Label),
-					)
+					m := fmt.Sprintf("%s has a special day labelled '%s'", contact["Display Name"].(string), day.Label)
+					if !today {
+						m = fmt.Sprintf("%s on %s", m, date.Format("January 02"))
+					}
+					specialDayMessages = append(specialDayMessages, m)
 				}
 			}
 		}
 	}
 
+	// handle when both are set
 	if len(contactsWithSpecialDays) > 0 && len(contactsWithBirthdays) > 0 {
 		allNames := append(contactsWithSpecialDays, contactsWithBirthdays...)
 		allMessages := []string{}
@@ -90,44 +106,42 @@ func Generate(contacts []map[string]interface{}, checkDate time.Time, period int
 		for _, message := range specialDayMessages {
 			allMessages = append(allMessages, fmt.Sprintf("* %s", message))
 		}
-		for _, name := range contactsWithBirthdays {
-			allMessages = append(allMessages, fmt.Sprintf("* %s has a birthday", name))
+		for _, message := range birthdayMessages {
+			allMessages = append(allMessages, fmt.Sprintf("* %s", message))
 		}
 
-		initialList := strings.Join(allNames[0:len(allNames)-1], ", ")
 		return true,
-			fmt.Sprintf("%s & %s have events", initialList, allNames[len(allNames)-1]),
+			fmt.Sprintf("%s have events", joinNamesList(allNames, ",", "&")),
 			strings.Join(allMessages, "\n"),
 			nil
 	}
 
+	// handle when only birthdays are set
+	if len(contactsWithBirthdays) == 1 {
+		return true,
+			fmt.Sprintf("%s's Birthday", contactsWithBirthdays[0]),
+			fmt.Sprintf("* %s", birthdayMessages[0]),
+			nil
+	}
+
+	if len(contactsWithBirthdays) > 1 {
+		return true,
+			fmt.Sprintf("%d birthdays", len(contactsWithBirthdays)),
+			fmt.Sprintf("* %s", strings.Join(birthdayMessages, "\n* ")),
+			nil
+	}
+
+	// handle when only special days are set
 	if len(specialDayMessages) == 1 {
 		return true,
 			specialDayMessages[0],
 			specialDayMessages[0],
 			nil
 	}
-
 	if len(specialDayMessages) > 1 {
-		initialList := strings.Join(contactsWithSpecialDays[0:len(contactsWithSpecialDays)-1], ", ")
 		return true,
-			fmt.Sprintf("%s & %s have special days", initialList, contactsWithSpecialDays[len(contactsWithSpecialDays)-1]),
+			fmt.Sprintf("%s have special days", joinNamesList(contactsWithSpecialDays, ",", "&")),
 			fmt.Sprintf("* %s", strings.Join(specialDayMessages, "\n* ")),
-			nil
-	}
-
-	if len(contactsWithBirthdays) == 1 {
-		return true,
-			fmt.Sprintf("%s's Birthday", contactsWithBirthdays[0]),
-			fmt.Sprintf("It's %s's birthday", contactsWithBirthdays[0]),
-			nil
-	}
-
-	if len(contactsWithBirthdays) > 1 {
-		initialList := strings.Join(contactsWithBirthdays[0:len(contactsWithBirthdays)-1], ", ")
-		return true,
-			fmt.Sprintf("%d birthdays", len(contactsWithBirthdays)),
-			fmt.Sprintf("%s & %s have birthdays", initialList, contactsWithBirthdays[len(contactsWithBirthdays)-1]),
 			nil
 	}
 
@@ -142,4 +156,10 @@ func dateInPeriod(periodStart, periodEnd, date time.Time) bool {
 		return true
 	}
 	return false
+}
+
+func joinNamesList(names []string, separator, finalSeparator string) string {
+	initialList := strings.Join(names[0:len(names)-1], separator+" ")
+
+	return fmt.Sprintf("%s %s %s", initialList, finalSeparator, names[len(names)-1])
 }

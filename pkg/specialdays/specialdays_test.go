@@ -64,6 +64,7 @@ func TestGenerate(t *testing.T) {
 		Alert         bool
 		ExpectedTitle string
 		ExpectedBody  string
+		Today         bool
 	}{
 		{
 			Description: "it sets nothing when there are no days",
@@ -88,7 +89,8 @@ func TestGenerate(t *testing.T) {
 			Period:        1,
 			Alert:         true,
 			ExpectedTitle: "John Appleseed's Birthday",
-			ExpectedBody:  "It's John Appleseed's birthday",
+			ExpectedBody:  "* John Appleseed has a birthday",
+			Today:         true,
 		},
 		{
 			Description: "it alerts on multiple birthdays",
@@ -114,7 +116,10 @@ func TestGenerate(t *testing.T) {
 			Period:        1,
 			Alert:         true,
 			ExpectedTitle: "3 birthdays",
-			ExpectedBody:  "John, Jane & Jill have birthdays",
+			ExpectedBody: `* John has a birthday
+* Jane has a birthday
+* Jill has a birthday`,
+			Today: true,
 		},
 		{
 			Description: "it alerts on birthdays in period",
@@ -136,7 +141,10 @@ func TestGenerate(t *testing.T) {
 			Period:        5,
 			Alert:         true,
 			ExpectedTitle: "3 birthdays",
-			ExpectedBody:  "John, Jane & Jill have birthdays",
+			ExpectedBody: `* John has a birthday on June 01
+* Jane has a birthday on June 04
+* Jill has a birthday on June 05`,
+			Today: false,
 		},
 		{
 			Description: "it alerts on special days",
@@ -151,6 +159,7 @@ func TestGenerate(t *testing.T) {
 			Alert:         true,
 			ExpectedTitle: "John has a special day labelled 'aniversary'",
 			ExpectedBody:  "John has a special day labelled 'aniversary'",
+			Today:         true,
 		},
 		{
 			Description: "it alerts on multiple special days",
@@ -170,6 +179,7 @@ func TestGenerate(t *testing.T) {
 			ExpectedTitle: "John & Jane have special days",
 			ExpectedBody: `* John has a special day labelled 'aniversary'
 * Jane has a special day labelled 'other'`,
+			Today: true,
 		},
 		{
 			Description: "it alerts on special days in period",
@@ -187,8 +197,9 @@ func TestGenerate(t *testing.T) {
 			Period:        10,
 			Alert:         true,
 			ExpectedTitle: "John & Jane have special days",
-			ExpectedBody: `* John has a special day labelled 'aniversary'
-* Jane has a special day labelled 'other'`,
+			ExpectedBody: `* John has a special day labelled 'aniversary' on March 10
+* Jane has a special day labelled 'other' on March 01`,
+			Today: false,
 		},
 		{
 			Description: "it alerts on named special days",
@@ -206,8 +217,9 @@ func TestGenerate(t *testing.T) {
 			Period:        200, // just a big period to catch and test the above
 			Alert:         true,
 			ExpectedTitle: "John & Jane have special days",
-			ExpectedBody: `* John has a special day labelled 'fathers-day-uk'
-* Jane has a special day labelled 'mothering-sunday'`,
+			ExpectedBody: `* John has a special day labelled 'fathers-day-uk' on June 20
+* Jane has a special day labelled 'mothering-sunday' on March 14`,
+			Today: false,
 		},
 		{
 			Description: "it alerts on birthdays and special days",
@@ -232,6 +244,7 @@ func TestGenerate(t *testing.T) {
 			ExpectedBody: `* John has a special day labelled 'aniversary'
 * Jane has a special day labelled 'other'
 * Jill has a birthday`,
+			Today: true,
 		},
 		{
 			Description: "it alerts on birthdays and special days in period",
@@ -253,20 +266,36 @@ func TestGenerate(t *testing.T) {
 			Period:        30,
 			Alert:         true,
 			ExpectedTitle: "John, Jane & Jill have events",
-			ExpectedBody: `* John has a special day labelled 'aniversary'
-* Jane has a special day labelled 'other'
-* Jill has a birthday`,
+			ExpectedBody: `* John has a special day labelled 'aniversary' on March 21
+* Jane has a special day labelled 'other' on March 21
+* Jill has a birthday on March 21`,
+			Today: false,
+		},
+		{
+			Description: "it alerts on birthdays in period and shows correct message when only one result",
+			Contacts: []map[string]interface{}{
+				{
+					"Display Name": "Jill",
+					"Birthday":     "1995-03-21",
+				},
+			},
+			CheckDate:     time.Date(2021, time.March, 1, 0, 0, 0, 0, time.UTC),
+			Period:        30,
+			Alert:         true,
+			ExpectedTitle: "Jill's Birthday",
+			ExpectedBody:  `* Jill has a birthday on March 21`,
+			Today:         false,
 		},
 	}
 
 	for _, test := range testCases {
 		t.Run(test.Description, func(t *testing.T) {
-			alert, title, body, err := Generate(test.Contacts, test.CheckDate, test.Period)
+			alert, title, body, err := Generate(test.Contacts, test.CheckDate, test.Period, test.Today)
 			if err != nil {
 				t.Fatalf("unexpected error: %s", err)
 			}
 			if test.Alert != alert {
-				t.Fatalf("unexpected alert:\ngot %v want %v", alert, test.Alert)
+				t.Errorf("unexpected alert:\ngot %v want %v", alert, test.Alert)
 			}
 			if test.ExpectedTitle != title {
 				t.Errorf("unexpected title:\ngot %v want %v", title, test.ExpectedTitle)

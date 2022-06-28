@@ -11,6 +11,7 @@ Current functionality:
 * Download contact data
 * Generate vCard file for one or more contacts
 * Sync the contacts to carddav server
+* Send notifications about birthdays and special events
 
 Example config file:
 
@@ -19,12 +20,21 @@ airtable:
   key: xxxxxxxxxxxxxxxxx
   base: xxxxxxxxxxxxxxxxx
   table: xxxxxxxxxxxxxxxxx
-  view: xxxxxx
+  view: Active
 vcard:
+  use_v3: true
   photo:
     size: 100
+dropbox:
+  path: /contacts.vcard
+  token: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 carddav:
-  serverURL: https://example.com/dav/addressbooks/user/user@example.com/Default
-  user: user@example.com
+  serverURL: https://carddav.fastmail.com/dav/addressbooks/user/xxxxxxxxxxxxxxxxxxxxxxxxx/Default
+  user: xxxxxxxxxxxxxxxxxxxxxxxxx
   password: xxxxxxxxxxxxxxxx
+pushover:
+  user_key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  app_token: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+webhook:
+  endpoint: https://hooks.zapier.com/hooks/catch/xxxxxxxxxxxxxx
 ```
