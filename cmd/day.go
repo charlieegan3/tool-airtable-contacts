@@ -33,7 +33,7 @@ var dayCmd = &cobra.Command{
 		}
 
 		// set the notification period
-		periodStart := time.Date(time.Now().Year(), time.Now().Month(), time.Now().Day()-1, 0, 0, 0, 0, time.UTC)
+		periodStart := time.Date(time.Now().Year(), time.Now().Month(), time.Now().Day(), 0, 0, 0, 0, time.UTC)
 		alert, title, body, err := specialdays.Generate(records, periodStart, 1, true)
 		if err != nil {
 			log.Fatalf("failed to generate alert message: %s", err)
