@@ -10,9 +10,9 @@ import (
 func Send(endpoint, title, body, linkURL string) error {
 	data := []map[string]string{
 		{
-			"Title": title,
-			"Body":  body,
-			"URL":   linkURL,
+			"title": title,
+			"body":  body,
+			"url":   linkURL,
 		},
 	}
 
