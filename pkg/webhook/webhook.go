@@ -8,10 +8,12 @@ import (
 )
 
 func Send(endpoint, title, body, linkURL string) error {
-	data := map[string]string{
-		"Title": title,
-		"Body":  body,
-		"URL":   linkURL,
+	data := []map[string]string{
+		{
+			"Title": title,
+			"Body":  body,
+			"URL":   linkURL,
+		},
 	}
 
 	b, err := json2.Marshal(data)
