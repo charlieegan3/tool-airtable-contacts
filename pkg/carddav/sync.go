@@ -7,10 +7,9 @@ import (
 
 	"github.com/charlieegan3/tool-airtable-contacts/pkg/vcard"
 	"github.com/pkg/errors"
-	"github.com/spf13/viper"
 )
 
-func Sync(client Client, records []map[string]interface{}) error {
+func Sync(client Client, records []map[string]interface{}, vCardV3 bool, vCardPhotoSize int) error {
 	// get the existing list of cards
 	existingItems, err := client.List()
 	if err != nil {
@@ -38,8 +37,8 @@ func Sync(client Client, records []map[string]interface{}) error {
 
 		vcardString, err := vcard.Generate(
 			[]map[string]interface{}{record},
-			viper.GetBool("vcard.use_v3"),
-			viper.GetInt("vcard.photo.size"),
+			vCardV3,
+			vCardPhotoSize,
 			id,
 		)
 		if err != nil {

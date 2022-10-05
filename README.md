@@ -1,40 +1,34 @@
-# airtable-contacts
+# tool-airtable-contacts
 
-This is a binary with functionality to sync a custom contact database from
-Airtable.
+This is a tool for [toolbelt](https://github.com/charlieegan3/toolbelt) which wraps functionality to run a contacts
+database in [Airtable](http://airtable.com). It syncs to a CardDAV endpoint and uses
+[webhook-rss](https://github.com/charlieegan3/tool-webhook-rss) to send updates via RSS.
 
-**Note:** It's not likely this will have any useful functionality for anyone
-other than the author.
+Example config:
 
-Current functionality:
-
-* Download contact data
-* Generate vCard file for one or more contacts
-* Sync the contacts to carddav server
-* Send notifications about birthdays and special events
-
-Example config file:
-
-```
-airtable:
-  key: xxxxxxxxxxxxxxxxx
-  base: xxxxxxxxxxxxxxxxx
-  table: xxxxxxxxxxxxxxxxx
-  view: Active
-vcard:
-  use_v3: true
-  photo:
-    size: 100
-dropbox:
-  path: /contacts.vcard
-  token: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-carddav:
-  serverURL: https://carddav.fastmail.com/dav/addressbooks/user/xxxxxxxxxxxxxxxxxxxxxxxxx/Default
-  user: xxxxxxxxxxxxxxxxxxxxxxxxx
-  password: xxxxxxxxxxxxxxxx
-pushover:
-  user_key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-  app_token: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-webhook:
-  endpoint: https://hooks.zapier.com/hooks/catch/xxxxxxxxxxxxxx
+```yaml
+tools:
+  ...
+  airtable-contacts:
+    jobs:
+      day:
+        schedule: "0 0 5 * * *"
+      week:
+        schedule: "0 0 5 * * 0"
+      sync:
+        schedule: "0 */15 * * * *"
+    endpoint: https://...
+    airtable:
+      key: xxxxxxxxxxxxxxxxx
+      base: xxxxxxxxxxxxxxxxx
+      table: xxxxxxxxxxxxxxxxx
+      view: xxx
+    carddav:
+      server_url: https://...
+      user: name@example.com
+      password: xxxxxxxxxxx
+    vcard:
+      use_v3: true
+      photo:
+        size: 100
 ```
