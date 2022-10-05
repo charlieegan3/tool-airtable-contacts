@@ -22,8 +22,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/charlieegan3/airtable-contacts/pkg/airtable"
-	"github.com/charlieegan3/airtable-contacts/pkg/carddav"
+	"github.com/charlieegan3/tool-airtable-contacts/pkg/airtable"
+	"github.com/charlieegan3/tool-airtable-contacts/pkg/carddav"
 )
 
 // syncCmd represents the sync command

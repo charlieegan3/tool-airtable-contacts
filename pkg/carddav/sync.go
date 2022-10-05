@@ -5,7 +5,7 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	"github.com/charlieegan3/airtable-contacts/pkg/vcard"
+	"github.com/charlieegan3/tool-airtable-contacts/pkg/vcard"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
 )

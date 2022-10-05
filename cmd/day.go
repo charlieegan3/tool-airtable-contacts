@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/charlieegan3/airtable-contacts/pkg/webhook"
+	"github.com/charlieegan3/tool-airtable-contacts/pkg/webhook"
 	"github.com/gomarkdown/markdown"
 	"log"
 	"time"
@@ -10,9 +10,9 @@ import (
 	air "github.com/mehanizm/airtable"
 	"github.com/spf13/cobra"
 
-	"github.com/charlieegan3/airtable-contacts/pkg/airtable"
-	"github.com/charlieegan3/airtable-contacts/pkg/pushover"
-	"github.com/charlieegan3/airtable-contacts/pkg/specialdays"
+	"github.com/charlieegan3/tool-airtable-contacts/pkg/airtable"
+	"github.com/charlieegan3/tool-airtable-contacts/pkg/pushover"
+	"github.com/charlieegan3/tool-airtable-contacts/pkg/specialdays"
 	"github.com/spf13/viper"
 )
 

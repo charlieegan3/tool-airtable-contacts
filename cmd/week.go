@@ -2,14 +2,14 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/charlieegan3/airtable-contacts/pkg/webhook"
+	"github.com/charlieegan3/tool-airtable-contacts/pkg/webhook"
 	"github.com/gomarkdown/markdown"
 	"log"
 	"time"
 
-	"github.com/charlieegan3/airtable-contacts/pkg/airtable"
-	"github.com/charlieegan3/airtable-contacts/pkg/pushover"
-	"github.com/charlieegan3/airtable-contacts/pkg/specialdays"
+	"github.com/charlieegan3/tool-airtable-contacts/pkg/airtable"
+	"github.com/charlieegan3/tool-airtable-contacts/pkg/pushover"
+	"github.com/charlieegan3/tool-airtable-contacts/pkg/specialdays"
 	psh "github.com/gregdel/pushover"
 	air "github.com/mehanizm/airtable"
 	"github.com/spf13/cobra"

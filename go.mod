@@ -1,4 +1,4 @@
-module github.com/charlieegan3/airtable-contacts
+module github.com/charlieegan3/tool-airtable-contacts
 
 go 1.19
 
