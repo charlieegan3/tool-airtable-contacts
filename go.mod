@@ -8,7 +8,7 @@ require (
 	github.com/antchfx/xmlquery v1.3.6
 	github.com/cenkalti/backoff/v4 v4.1.1
 	github.com/charlieegan3/special-days v0.0.0-20210701231319-175bc74510e3
-	github.com/charlieegan3/toolbelt v0.0.0-20221005090254-0aa39c308225
+	github.com/charlieegan3/toolbelt v0.0.0-20221012131106-c0a8a7937c75
 	github.com/disintegration/imaging v1.6.2
 	github.com/emersion/go-vcard v0.0.0-20210521075357-3445b9171995
 	github.com/gomarkdown/markdown v0.0.0-20220627144906-e9a81102ebeb

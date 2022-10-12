@@ -146,6 +146,8 @@ func (a *AirtableContacts) Jobs() ([]apis.Job, error) {
 	}, nil
 }
 
+func (a *AirtableContacts) ExternalJobsFuncSet(f func(job apis.ExternalJob) error) {}
+
 func (a *AirtableContacts) DatabaseMigrations() (*embed.FS, string, error) {
 	return &embed.FS{}, "migrations", nil
 }

@@ -63,8 +63,8 @@ github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA
 github.com/cespare/xxhash v1.1.0/go.mod h1:XrSqR1VqqWfGrhpAt58auRo0WTKS1nRRg3ghfAqPWnc=
 github.com/charlieegan3/special-days v0.0.0-20210701231319-175bc74510e3 h1:8QwBaAB9UJ+Br7K15qN1veIG8RKiguoz99LUQWxwQKw=
 github.com/charlieegan3/special-days v0.0.0-20210701231319-175bc74510e3/go.mod h1:n8HAe2Qma8/hBTJecDNnyZ8h21Zi9EwGHteN6/hEi+g=
-github.com/charlieegan3/toolbelt v0.0.0-20221005090254-0aa39c308225 h1:TuL3Vn5Q8oH6xZurFHJRBwV51nvgREM7VVkZvr72760=
-github.com/charlieegan3/toolbelt v0.0.0-20221005090254-0aa39c308225/go.mod h1:GHRnkuy/gW44uvXKFaj7y3iBT+W/BPqrqoDMdoU1Hn4=
+github.com/charlieegan3/toolbelt v0.0.0-20221012131106-c0a8a7937c75 h1:fh6p6dD8nA4SOLVftJsjrtO37bgR1BDDgofPu0b2q8U=
+github.com/charlieegan3/toolbelt v0.0.0-20221012131106-c0a8a7937c75/go.mod h1:GHRnkuy/gW44uvXKFaj7y3iBT+W/BPqrqoDMdoU1Hn4=
 github.com/chzyer/logex v1.1.10/go.mod h1:+Ywpsq7O8HXn0nuIou7OrIPyXbp3wmkHB+jjWRnGsAI=
 github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e/go.mod h1:nSuG5e5PlCu98SY8svDHJxuZscDgtXS6KTTbou5AhLI=
 github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1/go.mod h1:Q3SI9o4m/ZMnBNeIyt5eFwwo7qiLfzFZmjNmxjkiQlU=
