@@ -72,7 +72,7 @@ func (s *Sync) Run(ctx context.Context) error {
 }
 
 func (s *Sync) Timeout() time.Duration {
-	return 30 * time.Second
+	return 60 * time.Second
 }
 
 func (s *Sync) Schedule() string {
