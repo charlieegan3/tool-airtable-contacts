@@ -154,3 +154,4 @@ func (a *AirtableContacts) DatabaseMigrations() (*embed.FS, string, error) {
 func (a *AirtableContacts) DatabaseSet(db *sql.DB)              {}
 func (a *AirtableContacts) HTTPPath() string                    { return "" }
 func (a *AirtableContacts) HTTPAttach(router *mux.Router) error { return nil }
+func (a *AirtableContacts) HTTPHost() string                    { return "" }
