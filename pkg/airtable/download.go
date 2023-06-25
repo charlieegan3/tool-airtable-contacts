@@ -21,7 +21,7 @@ func Download(client *air.Client, databaseID, tableName, viewName string) ([]map
 			result, err = table.GetRecords().
 				FromView(viewName).
 				WithOffset(offset).
-				ReturnFields("Display Name", "JSON Addresses", "JSON Phone Numbers", "JSON Emails", "Note", "Company", "Profile Image", "Birthday", "JSON Special Days").
+				ReturnFields("ID", "Display Name", "JSON Addresses", "JSON Phone Numbers", "JSON Emails", "Note", "Company", "Profile Image", "Birthday", "JSON Special Days").
 				Do()
 			if err != nil {
 				return fmt.Errorf("failed to get records: %s", err)

@@ -1,9 +1,9 @@
 package carddav
 
 import (
-	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 
 	"github.com/maxatome/go-testdeep/td"
@@ -15,7 +15,7 @@ func TestList(t *testing.T) {
 		td.Cmp(t, r.Header["Authorization"], []string{"Basic YWxpY2U6cGFzc3dvcmQ="})
 		td.Cmp(t, r.Header["Depth"], []string{"1"})
 
-		b, err := ioutil.ReadFile("propfind.xml")
+		b, err := os.ReadFile("propfind.xml")
 		td.Cmp(t, err, nil)
 		w.Write(b)
 	}))
@@ -26,7 +26,7 @@ func TestList(t *testing.T) {
 	}
 
 	cardDavClient := Client{
-		URL:      testServer.URL + "/dav/addressbooks/user/charlieegan3@fastmail.com/Default",
+		URL:      testServer.URL + "/dav/addressbooks/user/charlieegan3@example.com/Default",
 		User:     "alice",
 		Password: "password",
 	}

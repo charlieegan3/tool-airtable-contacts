@@ -1,72 +1,142 @@
 package carddav
 
 import (
-	"crypto/sha1"
-	"encoding/hex"
+	"bytes"
 	"fmt"
+	"sort"
+	"strings"
+
+	govcard "github.com/emersion/go-vcard"
+	"github.com/pkg/errors"
 
 	"github.com/charlieegan3/tool-airtable-contacts/pkg/vcard"
-	"github.com/pkg/errors"
 )
 
 func Sync(client Client, records []map[string]interface{}, vCardV3 bool, vCardPhotoSize int) error {
-	// get the existing list of cards
-	existingItems, err := client.List()
+	existingItemsAll, err := client.GetAll()
 	if err != nil {
 		return errors.Wrap(err, "failed to list current vcards")
 	}
 
-	// first create any missing contacts, or new ones for updates
-	currentItems := []string{}
-	for _, record := range records {
-		// hash to use as ID
-		h := sha1.New()
-		h.Write([]byte(fmt.Sprintf("%v", record)))
-		id := hex.EncodeToString(h.Sum(nil))
-		currentItems = append(currentItems, id)
+	existingItemsCards, err := vcard.Parse(existingItemsAll)
+	if err != nil {
+		return errors.Wrap(err, "failed to parse current vcards")
+	}
 
-		shouldSkip := false
-		for _, v := range existingItems {
-			if id == v {
-				shouldSkip = true
-			}
+	recordsByID := make(map[string]map[string]interface{})
+	for _, record := range records {
+		id, ok := record["ID"].(string)
+		if !ok {
+			return errors.New("failed to get ID from record")
 		}
-		if shouldSkip {
+		recordsByID[id] = record
+	}
+
+	doneIDs := make(map[string]bool)
+	for _, existingCard := range existingItemsCards {
+		id := existingCard.Get(govcard.FieldUID)
+		if id == nil {
+			return errors.New("failed to get ID from vcard")
+		}
+		idString := id.Value
+		doneIDs[idString] = true
+
+		expectedRecord, ok := recordsByID[idString]
+		if !ok {
+			err = client.Delete(idString)
+			if err != nil {
+				return errors.Wrap(err, "failed to delete outdated vcard")
+			}
 			continue
 		}
 
-		vcardString, err := vcard.Generate(
-			[]map[string]interface{}{record},
+		expectedVcardString, err := vcard.Generate(
+			[]map[string]interface{}{expectedRecord},
 			vCardV3,
 			vCardPhotoSize,
-			id,
+			idString,
 		)
 		if err != nil {
 			return errors.Wrap(err, "failed to generate new vcard")
 		}
 
-		err = client.Put(id, vcardString)
+		buf := bytes.NewBufferString("")
+		enc := govcard.NewEncoder(buf)
+		err = enc.Encode(existingCard)
 		if err != nil {
-			return errors.Wrap(err, "failed to create new vcard")
+			return errors.Wrap(err, "failed to encode current vcard")
+		}
+		existingVcardString := strings.Replace(
+			strings.TrimSpace(buf.String()),
+			"TYPE=JPEG;ENCODING=b",
+			"ENCODING=b;TYPE=JPEG",
+			-1,
+		)
+
+		existingLines := strings.Split(strings.TrimSpace(existingVcardString), "\n")
+		sort.Slice(existingLines, func(i, j int) bool {
+			return existingLines[i] < existingLines[j]
+		})
+		expectedLines := strings.Split(strings.TrimSpace(expectedVcardString), "\n")
+		sort.Slice(expectedLines, func(i, j int) bool {
+			return expectedLines[i] < expectedLines[j]
+		})
+
+		shouldUpdate := false
+		if len(existingLines) != len(expectedLines) {
+			shouldUpdate = true
+		}
+		if strings.Join(existingLines, "") != strings.Join(expectedLines, "") {
+			shouldUpdate = true
+		}
+
+		if shouldUpdate {
+			fmt.Println("updating", idString)
+
+			if len(existingLines) == len(expectedLines) {
+				for i, line := range existingLines {
+					if line != expectedLines[i] {
+						fmt.Println("line", i, "differs")
+						fmt.Println("old", firstN(line, 100))
+						fmt.Println("new", firstN(expectedLines[i], 100))
+					}
+				}
+			}
+
+			err = client.Put(idString, expectedVcardString)
+			if err != nil {
+				return errors.Wrap(err, "failed to update vcard")
+			}
 		}
 	}
 
-	// finally, remove any old items not in the new list
-	for _, existingItem := range existingItems {
-		shouldDelete := true
-		for _, currentItem := range currentItems {
-			if currentItem == existingItem {
-				shouldDelete = false
-				break
-			}
+	for id, rec := range recordsByID {
+		if doneIDs[id] {
+			continue
 		}
-		if shouldDelete {
-			err = client.Delete(existingItem)
-			if err != nil {
-				return errors.Wrap(err, "failed to delete outdated vcard")
-			}
+
+		fmt.Println("creating", id)
+
+		expectedVcardString, err := vcard.Generate(
+			[]map[string]interface{}{rec},
+			vCardV3,
+			vCardPhotoSize,
+			id,
+		)
+
+		err = client.Put(id, expectedVcardString)
+		if err != nil {
+			return errors.Wrap(err, "failed to update vcard")
 		}
 	}
 
 	return nil
+}
+
+func firstN(str string, n int) string {
+	v := []rune(str)
+	if n >= len(v) {
+		return str
+	}
+	return string(v[:n])
 }

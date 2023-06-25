@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <D:multistatus xmlns:D="DAV:" xmlns:C="urn:ietf:params:xml:ns:carddav" xmlns:CS="http://calendarserver.org/ns/">
   <D:response>
-    <D:href>/dav/addressbooks/user/charlieegan3@fastmail.com/Default/</D:href>
+    <D:href>/dav/addressbooks/user/charlieegan3@example.com/Default/</D:href>
     <D:propstat>
       <D:prop>
         <D:creationdate>2021-08-16T05:52:22Z</D:creationdate>
@@ -28,7 +28,7 @@
     </D:propstat>
   </D:response>
   <D:response>
-    <D:href>/dav/addressbooks/user/charlieegan3@fastmail.com/Default/6316e64d-176c-42bc-9d59-30ed53c1a06b.vcf</D:href>
+    <D:href>/dav/addressbooks/user/charlieegan3@example.com/Default/6316e64d-176c-42bc-9d59-30ed53c1a06b.vcf</D:href>
     <D:propstat>
       <D:prop>
         <D:creationdate>2021-09-04T10:24:03Z</D:creationdate>
@@ -61,7 +61,7 @@
     </D:propstat>
   </D:response>
   <D:response>
-    <D:href>/dav/addressbooks/user/charlieegan3@fastmail.com/Default/a5fadfc4-27fc-459c-847d-c8dabe3f789e.vcf</D:href>
+    <D:href>/dav/addressbooks/user/charlieegan3@example.com/Default/a5fadfc4-27fc-459c-847d-c8dabe3f789e.vcf</D:href>
     <D:propstat>
       <D:prop>
         <D:creationdate>2021-09-04T07:23:12Z</D:creationdate>
@@ -94,7 +94,7 @@
     </D:propstat>
   </D:response>
   <D:response>
-    <D:href>/dav/addressbooks/user/charlieegan3@fastmail.com/Default/0dc02da7-7824-40a4-b665-4a87da899e41.vcf</D:href>
+    <D:href>/dav/addressbooks/user/charlieegan3@example.com/Default/0dc02da7-7824-40a4-b665-4a87da899e41.vcf</D:href>
     <D:propstat>
       <D:prop>
         <D:creationdate>2021-09-06T14:43:20Z</D:creationdate>
@@ -127,7 +127,7 @@
     </D:propstat>
   </D:response>
   <D:response>
-    <D:href>/dav/addressbooks/user/charlieegan3@fastmail.com/Default/0083b53f-e51f-4bd1-b15d-977e66f4a5f6.vcf</D:href>
+    <D:href>/dav/addressbooks/user/charlieegan3@example.com/Default/0083b53f-e51f-4bd1-b15d-977e66f4a5f6.vcf</D:href>
     <D:propstat>
       <D:prop>
         <D:creationdate>2021-09-06T14:42:40Z</D:creationdate>
@@ -160,7 +160,7 @@
     </D:propstat>
   </D:response>
   <D:response>
-    <D:href>/dav/addressbooks/user/charlieegan3@fastmail.com/Default/b2f6d7e0-372a-41b0-8b19-72f99dd62620.vcf</D:href>
+    <D:href>/dav/addressbooks/user/charlieegan3@example.com/Default/b2f6d7e0-372a-41b0-8b19-72f99dd62620.vcf</D:href>
     <D:propstat>
       <D:prop>
         <D:creationdate>2021-09-06T08:24:39Z</D:creationdate>
@@ -193,7 +193,7 @@
     </D:propstat>
   </D:response>
   <D:response>
-    <D:href>/dav/addressbooks/user/charlieegan3@fastmail.com/Default/b25289e1-56bb-4bab-84a4-7d9d0ac6c3c6.vcf</D:href>
+    <D:href>/dav/addressbooks/user/charlieegan3@example.com/Default/b25289e1-56bb-4bab-84a4-7d9d0ac6c3c6.vcf</D:href>
     <D:propstat>
       <D:prop>
         <D:creationdate>2021-09-04T07:23:12Z</D:creationdate>
@@ -226,7 +226,7 @@
     </D:propstat>
   </D:response>
   <D:response>
-    <D:href>/dav/addressbooks/user/charlieegan3@fastmail.com/Default/b9ab1c95-28f9-4037-9787-125792b31e4b.vcf</D:href>
+    <D:href>/dav/addressbooks/user/charlieegan3@example.com/Default/b9ab1c95-28f9-4037-9787-125792b31e4b.vcf</D:href>
     <D:propstat>
       <D:prop>
         <D:creationdate>2021-09-04T07:36:58Z</D:creationdate>
@@ -259,7 +259,7 @@
     </D:propstat>
   </D:response>
   <D:response>
-    <D:href>/dav/addressbooks/user/charlieegan3@fastmail.com/Default/56d7daf2-cf7c-4c59-a8c9-fc75bcd472f5.vcf</D:href>
+    <D:href>/dav/addressbooks/user/charlieegan3@example.com/Default/56d7daf2-cf7c-4c59-a8c9-fc75bcd472f5.vcf</D:href>
     <D:propstat>
       <D:prop>
         <D:creationdate>2021-09-04T07:27:50Z</D:creationdate>
@@ -292,7 +292,7 @@
     </D:propstat>
   </D:response>
   <D:response>
-    <D:href>/dav/addressbooks/user/charlieegan3@fastmail.com/Default/8324717f-e269-42ed-a3cd-34ca67015137.vcf</D:href>
+    <D:href>/dav/addressbooks/user/charlieegan3@example.com/Default/8324717f-e269-42ed-a3cd-34ca67015137.vcf</D:href>
     <D:propstat>
       <D:prop>
         <D:creationdate>2021-09-04T07:26:13Z</D:creationdate>
@@ -325,7 +325,7 @@
     </D:propstat>
   </D:response>
   <D:response>
-    <D:href>/dav/addressbooks/user/charlieegan3@fastmail.com/Default/974a80c2-c4f9-4f86-a0ad-f634d927b436.vcf</D:href>
+    <D:href>/dav/addressbooks/user/charlieegan3@example.com/Default/974a80c2-c4f9-4f86-a0ad-f634d927b436.vcf</D:href>
     <D:propstat>
       <D:prop>
         <D:creationdate>2021-09-04T07:25:37Z</D:creationdate>
@@ -358,7 +358,7 @@
     </D:propstat>
   </D:response>
   <D:response>
-    <D:href>/dav/addressbooks/user/charlieegan3@fastmail.com/Default/6639f566-d597-4de2-902a-aebc54acb052.vcf</D:href>
+    <D:href>/dav/addressbooks/user/charlieegan3@example.com/Default/6639f566-d597-4de2-902a-aebc54acb052.vcf</D:href>
     <D:propstat>
       <D:prop>
         <D:creationdate>2021-09-04T07:24:30Z</D:creationdate>
@@ -391,7 +391,7 @@
     </D:propstat>
   </D:response>
   <D:response>
-    <D:href>/dav/addressbooks/user/charlieegan3@fastmail.com/Default/1e771cd4-3af8-4e94-b4ed-1173399ed868.vcf</D:href>
+    <D:href>/dav/addressbooks/user/charlieegan3@example.com/Default/1e771cd4-3af8-4e94-b4ed-1173399ed868.vcf</D:href>
     <D:propstat>
       <D:prop>
         <D:creationdate>2021-09-04T07:23:30Z</D:creationdate>

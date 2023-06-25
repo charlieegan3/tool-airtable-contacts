@@ -8,6 +8,7 @@ import (
 
 	"github.com/antchfx/xmlquery"
 	"github.com/cenkalti/backoff/v4"
+	"github.com/google/martian/log"
 	"github.com/pkg/errors"
 )
 
@@ -89,11 +90,34 @@ func (c *Client) Put(id string, vcardData string) (err error) {
 	return nil
 }
 
+func (c *Client) GetAll() (string, error) {
+	body, err := c.do(
+		strings.TrimSuffix(c.URL, "/"),
+		"GET",
+		map[string]string{
+			"Depth": "1",
+		},
+		nil,
+	)
+	if err != nil {
+		return "", errors.Wrap(err, "failed to put vcf file")
+	}
+	defer body.Close()
+
+	bs, err := io.ReadAll(body)
+	if err != nil {
+		return "", errors.Wrap(err, "failed to read body")
+	}
+
+	return string(bs), nil
+}
+
 func (c *Client) do(url string, verb string, headers map[string]string, requestBody io.Reader) (io.ReadCloser, error) {
 	var body io.ReadCloser
 	operation := func() error {
 		req, err := http.NewRequest(verb, url, requestBody)
 		if err != nil {
+			log.Debugf("failed to make PROPFIND request to list items in carddav endpoint: %s", err)
 			return errors.Wrap(err, "failed to make PROPFIND request to list items in carddav endpoint")
 		}
 
@@ -105,10 +129,12 @@ func (c *Client) do(url string, verb string, headers map[string]string, requestB
 
 		resp, err := http.DefaultClient.Do(req)
 		if err != nil {
+			log.Debugf("failed to make request: %s", err)
 			return errors.Wrap(err, "failed to make request")
 		}
 
 		if resp.StatusCode > 399 || resp.StatusCode < 100 {
+			log.Debugf("server returned error: %d", resp.StatusCode)
 			return fmt.Errorf("server returned error: %d", resp.StatusCode)
 		}
 

@@ -1,4 +1,5 @@
 config.yaml
+config.test.yaml
 *.vcard
 airtable-contacts
 

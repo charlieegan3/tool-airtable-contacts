@@ -119,6 +119,10 @@ func Generate(contacts []map[string]interface{}, useV3 bool, photoSize int, id s
 						}
 						defer resp.Body.Close()
 
+						if resp.StatusCode != 200 {
+							return "", fmt.Errorf("failed to get photo: %s", resp.Status)
+						}
+
 						image, _, err := image.Decode(resp.Body)
 						if err != nil {
 							return "", fmt.Errorf("failed to decode photo: %s", err)
@@ -134,7 +138,7 @@ func Generate(contacts []map[string]interface{}, useV3 bool, photoSize int, id s
 						card.Set(govcard.FieldPhoto, &govcard.Field{
 							Value: base64.StdEncoding.EncodeToString(buf.Bytes()),
 							Params: map[string][]string{
-								govcard.ParamType: {"image/jpg"},
+								govcard.ParamType: {"JPEG"},
 								"ENCODING":        {"b"},
 							},
 						})
@@ -162,7 +166,14 @@ func Generate(contacts []map[string]interface{}, useV3 bool, photoSize int, id s
 		}
 	}
 
-	return strings.TrimSpace(buf.String()), nil
+	out := strings.Replace(
+		strings.TrimSpace(buf.String()),
+		"TYPE=JPEG;ENCODING=b",
+		"ENCODING=b;TYPE=JPEG",
+		1,
+	)
+
+	return out, nil
 }
 
 func computeNameValues(contact map[string]interface{}) (string, string, string, error) {

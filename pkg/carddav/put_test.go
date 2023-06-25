@@ -3,7 +3,6 @@ package carddav
 import (
 	"io/ioutil"
 	"net/http"
-
 	"net/http/httptest"
 	"testing"
 
@@ -23,7 +22,7 @@ END:VCARD`
 	testServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		td.Cmp(t, r.Method, "PUT")
 		td.Cmp(t, r.Header["Authorization"], []string{"Basic YWxpY2U6cGFzc3dvcmQ="})
-		td.Cmp(t, r.URL.Path, "/dav/addressbooks/user/charlieegan3@fastmail.com/Default/test-id.vcf")
+		td.Cmp(t, r.URL.Path, "/dav/addressbooks/user/charlieegan3@example.com/Default/test-id.vcf")
 
 		bytes, err := ioutil.ReadAll(r.Body)
 		td.Cmp(t, err, nil)
@@ -33,7 +32,7 @@ END:VCARD`
 	}))
 
 	cardDavClient := Client{
-		URL:      testServer.URL + "/dav/addressbooks/user/charlieegan3@fastmail.com/Default/",
+		URL:      testServer.URL + "/dav/addressbooks/user/charlieegan3@example.com/Default/",
 		User:     "alice",
 		Password: "password",
 	}

@@ -33,7 +33,7 @@ func TestBackoff(t *testing.T) {
 	}
 
 	cardDavClient := Client{
-		URL:      testServer.URL + "/dav/addressbooks/user/charlieegan3@fastmail.com/Default",
+		URL:      testServer.URL + "/dav/addressbooks/user/charlieegan3@example.com/Default",
 		User:     "alice",
 		Password: "password",
 	}
