@@ -3,6 +3,7 @@ package carddav
 import (
 	"bytes"
 	"fmt"
+	"log"
 	"sort"
 	"strings"
 

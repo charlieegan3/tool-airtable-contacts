@@ -13,7 +13,7 @@ func Download(client *air.Client, databaseID, tableName, viewName string) ([]map
 
 	table := client.GetTable(databaseID, tableName)
 
-	offset := ""
+	offset := "0"
 	for {
 		var result *air.Records
 		var err error
@@ -43,7 +43,7 @@ func Download(client *air.Client, databaseID, tableName, viewName string) ([]map
 		}
 
 		// have reached the end
-		if len(result.Records) < 100 {
+		if result.Offset == "" {
 			break
 		}
 
