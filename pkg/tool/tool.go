@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"embed"
 	"fmt"
+	"time"
 
 	"github.com/charlieegan3/tool-airtable-contacts/pkg/tool/jobs"
 
@@ -113,6 +114,13 @@ func (a *AirtableContacts) Jobs() ([]apis.Job, error) {
 		return j, fmt.Errorf("missing required config path: %s", path)
 	}
 
+	// load timeouts
+	path = "jobs.sync.timeout"
+	syncTimeout, ok := a.config.Path(path).Data().(int)
+	if !ok {
+		return j, fmt.Errorf("missing required config path: %s", path)
+	}
+
 	return []apis.Job{
 		&jobs.Day{
 			ScheduleOverride: daySchedule,
@@ -132,6 +140,7 @@ func (a *AirtableContacts) Jobs() ([]apis.Job, error) {
 		},
 		&jobs.Sync{
 			ScheduleOverride: syncSchedule,
+			TimeoutDuration:  time.Second * time.Duration(syncTimeout),
 			Endpoint:         endpoint,
 			AirtableKey:      airtableKey,
 			AirtableBase:     airtableBase,

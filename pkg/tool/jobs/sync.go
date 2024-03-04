@@ -5,15 +5,17 @@ import (
 	"fmt"
 	"time"
 
+	air "github.com/mehanizm/airtable"
+
 	"github.com/charlieegan3/tool-airtable-contacts/pkg/airtable"
 	"github.com/charlieegan3/tool-airtable-contacts/pkg/carddav"
-	air "github.com/mehanizm/airtable"
 )
 
 // Sync copies the data in airtable into a carddav server for sycning to devices
 type Sync struct {
 	ScheduleOverride string
 	Endpoint         string
+	TimeoutDuration  time.Duration
 
 	AirtableKey   string
 	AirtableBase  string
@@ -71,9 +73,7 @@ func (s *Sync) Run(ctx context.Context) error {
 	}
 }
 
-func (s *Sync) Timeout() time.Duration {
-	return 60 * time.Second
-}
+func (s *Sync) Timeout() time.Duration { return s.TimeoutDuration }
 
 func (s *Sync) Schedule() string {
 	if s.ScheduleOverride != "" {
