@@ -3,7 +3,7 @@ package carddav
 import (
 	"bytes"
 	"fmt"
-	"log"
+	"regexp"
 	"sort"
 	"strings"
 
@@ -14,6 +14,11 @@ import (
 )
 
 func Sync(client Client, records []map[string]interface{}, vCardV3 bool, vCardPhotoSize int) error {
+
+	reOrderPhotoAttrs := regexp.MustCompile(`(TYPE=[A-Z]+);(ENCODING=\w)`)
+	rePhotoEncodingAttr := regexp.MustCompile(`ENCODING=(\w);`)
+	rePhoneAttr := regexp.MustCompile(`TEL;TYPE=(\w+)`)
+
 	existingItemsAll, err := client.GetAll()
 	if err != nil {
 		return errors.Wrap(err, "failed to list current vcards")
@@ -67,12 +72,15 @@ func Sync(client Client, records []map[string]interface{}, vCardV3 bool, vCardPh
 		if err != nil {
 			return errors.Wrap(err, "failed to encode current vcard")
 		}
-		existingVcardString := strings.Replace(
-			strings.TrimSpace(buf.String()),
-			"TYPE=JPEG;ENCODING=b",
-			"ENCODING=b;TYPE=JPEG",
-			-1,
-		)
+
+		existingVcardString := strings.TrimSpace(buf.String())
+
+		existingVcardString = reOrderPhotoAttrs.ReplaceAllString(existingVcardString, "$2;$1")
+		existingVcardString = rePhotoEncodingAttr.ReplaceAllString(existingVcardString, "ENCODING=b;")
+		existingVcardString = rePhoneAttr.ReplaceAllStringFunc(existingVcardString, func(s string) string {
+			parts := rePhoneAttr.FindStringSubmatch(s)
+			return fmt.Sprintf("TEL;TYPE=%s", strings.ToLower(parts[1]))
+		})
 
 		existingLines := strings.Split(strings.TrimSpace(existingVcardString), "\n")
 		sort.Slice(existingLines, func(i, j int) bool {
