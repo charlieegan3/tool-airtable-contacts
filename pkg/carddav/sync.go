@@ -15,10 +15,6 @@ import (
 
 func Sync(client Client, records []map[string]interface{}, vCardV3 bool, vCardPhotoSize int) error {
 
-	reOrderPhotoAttrs := regexp.MustCompile(`(TYPE=[A-Z]+);(ENCODING=\w)`)
-	rePhotoEncodingAttr := regexp.MustCompile(`ENCODING=(\w);`)
-	rePhoneAttr := regexp.MustCompile(`TEL;TYPE=(\w+)`)
-
 	existingItemsAll, err := client.GetAll()
 	if err != nil {
 		return errors.Wrap(err, "failed to list current vcards")
@@ -47,6 +43,7 @@ func Sync(client Client, records []map[string]interface{}, vCardV3 bool, vCardPh
 		idString := id.Value
 		doneIDs[idString] = true
 
+		var ok bool
 		expectedRecord, ok := recordsByID[idString]
 		if !ok {
 			err = client.Delete(idString)
@@ -56,66 +53,35 @@ func Sync(client Client, records []map[string]interface{}, vCardV3 bool, vCardPh
 			continue
 		}
 
-		expectedVcardString, err := vcard.Generate(
-			[]map[string]interface{}{expectedRecord},
+		needsUpdate := false
+		note := existingCard.Get(govcard.FieldNote)
+		if note == nil {
+			needsUpdate = true
+		} else {
+			lines := strings.Split(note.Value, "\n")
+			var lastLine string
+			if len(lines) > 0 {
+				lastLine = strings.TrimSpace(lines[len(lines)-1])
+			}
+			if lastLine != vcard.CRC32Hash(expectedRecord) {
+				needsUpdate = true
+			}
+		}
+
+		if !needsUpdate {
+			continue
+		}
+
+		err := updateVcard(
+			client,
+			expectedRecord,
+			existingCard,
 			vCardV3,
 			vCardPhotoSize,
 			idString,
 		)
 		if err != nil {
-			return errors.Wrap(err, "failed to generate new vcard")
-		}
-
-		buf := bytes.NewBufferString("")
-		enc := govcard.NewEncoder(buf)
-		err = enc.Encode(existingCard)
-		if err != nil {
-			return errors.Wrap(err, "failed to encode current vcard")
-		}
-
-		existingVcardString := strings.TrimSpace(buf.String())
-
-		existingVcardString = reOrderPhotoAttrs.ReplaceAllString(existingVcardString, "$2;$1")
-		existingVcardString = rePhotoEncodingAttr.ReplaceAllString(existingVcardString, "ENCODING=b;")
-		existingVcardString = rePhoneAttr.ReplaceAllStringFunc(existingVcardString, func(s string) string {
-			parts := rePhoneAttr.FindStringSubmatch(s)
-			return fmt.Sprintf("TEL;TYPE=%s", strings.ToLower(parts[1]))
-		})
-
-		existingLines := strings.Split(strings.TrimSpace(existingVcardString), "\n")
-		sort.Slice(existingLines, func(i, j int) bool {
-			return existingLines[i] < existingLines[j]
-		})
-		expectedLines := strings.Split(strings.TrimSpace(expectedVcardString), "\n")
-		sort.Slice(expectedLines, func(i, j int) bool {
-			return expectedLines[i] < expectedLines[j]
-		})
-
-		shouldUpdate := false
-		if len(existingLines) != len(expectedLines) {
-			shouldUpdate = true
-		}
-		if strings.Join(existingLines, "") != strings.Join(expectedLines, "") {
-			shouldUpdate = true
-		}
-
-		if shouldUpdate {
-			fmt.Println("updating", idString)
-
-			if len(existingLines) == len(expectedLines) {
-				for i, line := range existingLines {
-					if line != expectedLines[i] {
-						fmt.Println("line", i, "differs")
-						fmt.Println("old", firstN(line, 100))
-						fmt.Println("new", firstN(expectedLines[i], 100))
-					}
-				}
-			}
-
-			err = client.Put(idString, expectedVcardString)
-			if err != nil {
-				return errors.Wrap(err, "failed to update vcard")
-			}
+			return errors.Wrap(err, "failed to update vcard")
 		}
 	}
 
@@ -127,11 +93,12 @@ func Sync(client Client, records []map[string]interface{}, vCardV3 bool, vCardPh
 		fmt.Println("creating", id)
 
 		expectedVcardString, err := vcard.Generate(
-			[]map[string]interface{}{rec},
+			rec,
 			vCardV3,
 			vCardPhotoSize,
 			id,
 		)
+		expectedVcardString = normalizeVcard(expectedVcardString)
 
 		err = client.Put(id, expectedVcardString)
 		if err != nil {
@@ -140,6 +107,92 @@ func Sync(client Client, records []map[string]interface{}, vCardV3 bool, vCardPh
 	}
 
 	return nil
+}
+
+func updateVcard(
+	client Client,
+	expectedRecord map[string]interface{},
+	existingCard govcard.Card,
+	vCardV3 bool,
+	vCardPhotoSize int,
+	idString string,
+) error {
+	expectedVcardString, err := vcard.Generate(
+		expectedRecord,
+		vCardV3,
+		vCardPhotoSize,
+		idString,
+	)
+	if err != nil {
+		return errors.Wrap(err, "failed to generate new vcard")
+	}
+
+	expectedVcardString = normalizeVcard(expectedVcardString)
+
+	var existingVcardString string
+	buf := bytes.NewBufferString("")
+	enc := govcard.NewEncoder(buf)
+	err = enc.Encode(existingCard)
+	if err != nil {
+		return errors.Wrap(err, "failed to encode current vcard")
+	}
+
+	existingVcardString = normalizeVcard(buf.String())
+
+	existingLines := strings.Split(strings.TrimSpace(existingVcardString), "\n")
+	sort.Slice(existingLines, func(i, j int) bool {
+		return existingLines[i] < existingLines[j]
+	})
+	expectedLines := strings.Split(strings.TrimSpace(expectedVcardString), "\n")
+	sort.Slice(expectedLines, func(i, j int) bool {
+		return expectedLines[i] < expectedLines[j]
+	})
+
+	shouldUpdate := false
+	if len(existingLines) != len(expectedLines) {
+		shouldUpdate = true
+	}
+	if strings.Join(existingLines, "") != strings.Join(expectedLines, "") {
+		shouldUpdate = true
+	}
+
+	if shouldUpdate {
+		fmt.Println("updating", idString)
+
+		if len(existingLines) == len(expectedLines) {
+			for i, line := range existingLines {
+				if line != expectedLines[i] {
+					fmt.Println("line", i, "differs")
+					fmt.Println("old", firstN(line, 100))
+					fmt.Println("new", firstN(expectedLines[i], 100))
+				}
+			}
+		}
+
+		err = client.Put(idString, expectedVcardString)
+		if err != nil {
+			return errors.Wrap(err, "failed to update vcard")
+		}
+	}
+
+	return nil
+}
+
+func normalizeVcard(vcardString string) string {
+	reOrderPhotoAttrs := regexp.MustCompile(`(ENCODING=\w);(TYPE=[A-Z]+)`)
+	rePhoneAttr := regexp.MustCompile(`TEL;TYPE=(\w+)`)
+
+	newVcardString := strings.TrimSpace(vcardString)
+
+	newVcardString = reOrderPhotoAttrs.ReplaceAllString(newVcardString, "$2;$1")
+	newVcardString = rePhoneAttr.ReplaceAllStringFunc(newVcardString, func(s string) string {
+		parts := rePhoneAttr.FindStringSubmatch(s)
+		return fmt.Sprintf("TEL;TYPE=%s", strings.ToLower(parts[1]))
+	})
+
+	newVcardString = strings.ReplaceAll(newVcardString, "ENCODING=b", "ENCODING=B")
+
+	return newVcardString
 }
 
 func firstN(str string, n int) string {
